@@ -29,3 +29,8 @@ Lutaro is provided here, not by Sony.
 This repository hosts the static site served at
 https://tarakanof.github.io/Lutaro-Site/ via GitHub Pages. The app itself is
 developed in a separate private repository.
+
+The site is built with [Astro](https://astro.build): pages live in
+`src/pages/`, the shared layout in `src/layouts/Base.astro`. Pushing to
+`main` builds and deploys via `.github/workflows/deploy.yml`. Local dev:
+`npm install && npm run dev`.

@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Lutaro — Camera Setup Guide"
+  description="How to set up your Sony camera for Lutaro: Wi-Fi, PC Remote, Access Authentication, pairing, and USB — with exact menu paths for both menu generations."
+>
+  <h1>Set up your Sony camera for Lutaro</h1>
+  <p class="meta">Menu paths verified against Sony's official α6700 Help Guide · July 2026</p>
+
+  <p>
+    Lutaro talks to your camera the same way Sony's own remote software does:
+    over Wi-Fi using the camera's <strong>PC Remote</strong> function, or (on
+    Mac) over USB. This guide walks through every camera setting the app
+    needs, with the exact menu paths.
+  </p>
+
+  <div class="note">
+    <strong>Two menu generations.</strong> Newer Sony bodies (a9&nbsp;III,
+    α1&nbsp;II, ZV-E1, and recent firmware on the a7&nbsp;IV, a7R&nbsp;V, and
+    α1) renamed the remote-control menus:
+    <em>Cnct./PC&nbsp;Remote → PC&nbsp;Remote Function</em> became
+    <em>Cnct./Remote&nbsp;Sht. → Remote Shoot Function</em>. The α6700 and
+    most earlier bodies keep the classic names. Both are shown below;
+    everything else is named the same on both generations.
+  </div>
+
+  <h2 id="wifi">1. Put the camera on your Wi-Fi network</h2>
+  <p>
+    Camera and device (iPhone, iPad, or Mac) must be on the same Wi-Fi
+    network.
+  </p>
+  <span class="path">MENU → Network → Wi-Fi → Wi-Fi Connect = On</span>
+  <p>
+    The camera searches for access points. If yours isn't listed, use
+    <strong>WPS Push</strong> (press the WPS button on your router) or
+    <strong>Access Point Set.</strong> (enter the network name and password
+    manually) in the same Wi-Fi menu.
+  </p>
+  <div class="note">
+    Recent firmware (α6700 2.00 and later) supports only WPA2/WPA3 networks —
+    the camera won't join old WPA- or WEP-secured networks.
+  </div>
+
+  <h2 id="pc-remote">2. Turn on PC Remote</h2>
+  <p>This is the switch that lets Lutaro connect at all.</p>
+  <div class="overflow">
+    <table>
+      <tr><th>Bodies</th><th>Menu path</th></tr>
+      <tr>
+        <td>α6700 and most earlier bodies</td>
+        <td>MENU → Network → Cnct./PC Remote → PC Remote Function →
+            PC Remote = <strong>On</strong></td>
+      </tr>
+      <tr>
+        <td>a9 III, α1 II, ZV-E1, updated a7 IV / a7R V / α1</td>
+        <td>MENU → Network → Cnct./Remote Sht. → Remote Shoot Function →
+            Remote Shooting = <strong>On</strong></td>
+      </tr>
+    </table>
+  </div>
+  <div class="note">
+    The camera drops Wi-Fi when it sleeps. If Lutaro can't find it, wake the
+    camera (half-press the shutter) and scan again.
+  </div>
+
+  <h2 id="access-auth">3. Access Authentication — with or without a password</h2>
+  <p>
+    Sony cameras can protect remote connections with a user name and
+    password. The setting is called <strong>Access Authen.</strong> and lives
+    in the same place on both menu generations:
+  </p>
+  <span class="path">MENU → Network → Network Option → Access Authen. Settings → Access Authen.</span>
+  <ul>
+    <li>
+      <strong>On</strong> — the connection is authenticated and encrypted
+      (SSH). Lutaro asks for the camera's user name and password. This is
+      Sony's recommended mode.
+    </li>
+    <li>
+      <strong>Off</strong> — no password, no encryption; instead the camera
+      asks you to approve each new device once (<a href="#pairing">pairing</a>,
+      below). Sony's help guide warns the connection can be intercepted in
+      this mode.
+    </li>
+  </ul>
+
+  <h3>Where to find the user name and password</h3>
+  <span class="path">MENU → Network → Network Option → Access Authen. Info</span>
+  <p>
+    This screen shows the camera's user name, password, MAC address, and
+    fingerprint. The credentials are auto-generated at the factory; you can
+    change them (or generate a fresh password) under
+    <em>Access Authen. Settings</em>. Type the user name and password into
+    Lutaro exactly as shown.
+  </p>
+  <div class="note">
+    If you regenerate the password, saved connections in Lutaro will fail
+    until you enter the new one — the app will tell you when that happens.
+  </div>
+
+  <h2 id="pairing">4. Pairing (only when Access Authen. is Off)</h2>
+  <p>
+    With Access Authen. <strong>Off</strong>, the first connection from a new
+    device must be approved on the camera body:
+  </p>
+  <div class="overflow">
+    <table>
+      <tr><th>Bodies</th><th>Menu path</th></tr>
+      <tr>
+        <td>α6700 and most earlier bodies</td>
+        <td>MENU → Network → Cnct./PC Remote → PC Remote Function → Pairing</td>
+      </tr>
+      <tr>
+        <td>a9 III, α1 II, ZV-E1, updated a7 IV / a7R V / α1</td>
+        <td>MENU → Network → Cnct./Remote Sht. → Remote Shoot Function → Pairing</td>
+      </tr>
+    </table>
+  </div>
+  <ol>
+    <li>Open <em>Pairing</em> on the camera.</li>
+    <li>Connect from Lutaro.</li>
+    <li>Approve the prompt that appears on the camera screen.</li>
+  </ol>
+  <p>
+    The camera remembers up to 20 paired devices. If the list fills up (or
+    after a camera initialization), clear it and re-pair:
+  </p>
+  <span class="path">MENU → Network → Network Option → Reset Network Set.</span>
+  <div class="note">
+    Reset Network Set. clears <em>all</em> network settings, including saved
+    Wi-Fi networks — you'll need step 1 again afterwards.
+  </div>
+
+  <h2 id="usb">5. USB (Mac only)</h2>
+  <p>
+    On the Mac, Lutaro can also connect over a USB cable. Set the camera's
+    USB mode to remote control:
+  </p>
+  <span class="path">MENU → Setup → USB → USB Connection Mode → PC Remote</span>
+  <p>
+    If USB Connection Mode is set to <em>Sel. When Connect</em>, the camera
+    asks on every cable connect — choose
+    <strong>Remote Shoot (PC Remote)</strong>.
+  </p>
+
+  <h2 id="troubleshooting">6. Troubleshooting</h2>
+  <ul>
+    <li>
+      <strong>Camera not found on Wi-Fi</strong> — it's probably asleep; the
+      camera drops Wi-Fi when idle. Wake it, confirm it's on the same network,
+      and confirm PC Remote (step 2) is On.
+    </li>
+    <li>
+      <strong>"Camera is busy"</strong> — another app holds the connection.
+      Close Imaging Edge Desktop, Creators' App, or any other Sony remote
+      software, then retry. Sony cameras allow only one remote session at a
+      time.
+    </li>
+    <li>
+      <strong>Wrong user name or password</strong> — re-check them on the
+      camera under <em>Network → Network Option → Access Authen. Info</em>.
+      They're case-sensitive.
+    </li>
+    <li>
+      <strong>"Fingerprint changed"</strong> — appears after a camera
+      initialization or network reset, or if a different camera answers at
+      the same address. If you reset the camera (or this is genuinely a
+      different body), trust the new fingerprint; otherwise check your
+      network.
+    </li>
+    <li>
+      <strong>Pairing prompt never appears</strong> — make sure the camera is
+      sitting in the <em>Pairing</em> menu (step 4) <em>before</em> you
+      connect from Lutaro.
+    </li>
+  </ul>
+
+  <h2 id="support">Questions?</h2>
+  <p>
+    Open an issue at
+    <a href="https://github.com/tarakanof/Lutaro-Site/issues">github.com/tarakanof/Lutaro-Site/issues</a>.
+  </p>
+
+  <p class="meta" style="margin-top: 3rem; font-size: 0.85em;">
+    Menu names are Sony's; paths were verified against the official
+    <a href="https://helpguide.sony.net/ilc/2320/v1/en/">α6700 Help Guide</a>
+    (and the a9&nbsp;III / α1&nbsp;II / ZV-E1 guides for the newer naming) in
+    July 2026. Sony may rename menus in future firmware — if a path doesn't
+    match your camera, check the
+    <a href="https://www.sony.net/electronics/support/">help guide for your
+    model</a>.
+  </p>
+</Base>

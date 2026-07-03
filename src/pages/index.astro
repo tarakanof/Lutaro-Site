@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base
+  title="Lutaro — Sony Picture Profile manager for iPhone, iPad, and Mac"
+  description="Lutaro is a native iPhone, iPad, and Mac app for managing Sony camera Picture Profiles: build a reusable library of looks and write them to your camera over Wi-Fi or USB."
+>
+  <section class="hero">
+    <h1>Your Picture Profiles, finally a library.</h1>
+    <p class="tagline">
+      Lutaro is a native iPhone, iPad, and Mac app for Sony cameras. Build a
+      reusable library of Picture Profile looks, organize them with tags, and
+      write them to your camera's PP slots over Wi-Fi or USB.
+    </p>
+    <div class="cta">
+      <a class="button primary" href={`${base}/setup/`}>Camera setup guide</a>
+      <a class="button" href="https://github.com/tarakanof/Lutaro-Site/issues">Support</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>A real library</h3>
+      <p>
+        Every look you build is a profile you keep — named, tagged, searchable,
+        and previewable. Stop re-dialing S-Cinetone tweaks from a notes app.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>Writes to the camera</h3>
+      <p>
+        Connect over Wi-Fi or USB and write any profile to a PP slot — the same
+        protocol Sony's own software uses. Your camera's current PP selection
+        stays untouched.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>iPhone, iPad &amp; Mac</h3>
+      <p>
+        Native SwiftUI on every platform. The library syncs through your own
+        iCloud if you want it to — or stays entirely on one device.
+      </p>
+    </div>
+    <div class="feature">
+      <h3>Private by design</h3>
+      <p>
+        No accounts, no analytics, no servers. Nothing you do in Lutaro leaves
+        your device. <a href={`${base}/privacy/`}>Read the whole policy</a> —
+        it's short.
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .hero { padding: 1.5rem 0 1rem; }
+    .hero h1 {
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.8rem;
+    }
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 38rem;
+      margin: 0 0 1.6rem;
+    }
+    .cta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .button {
+      display: inline-block;
+      padding: 0.55rem 1.1rem;
+      border-radius: 980px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95em;
+    }
+    .button.primary {
+      background: var(--link);
+      border-color: var(--link);
+      color: #fff;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 0.9rem;
+      margin-top: 2.5rem;
+    }
+    .feature {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+    }
+    .feature h3 { margin: 0 0 0.4rem; }
+    .feature p { margin: 0; font-size: 0.95em; color: var(--text-secondary); }
+  </style>
+</Base>

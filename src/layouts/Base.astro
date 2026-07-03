@@ -1,0 +1,162 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const nav = [
+  { href: `${base}/`, label: 'Home' },
+  { href: `${base}/setup/`, label: 'Setup Guide' },
+  { href: `${base}/privacy/`, label: 'Privacy' },
+  { href: 'https://github.com/tarakanof/Lutaro-Site/issues', label: 'Support' },
+];
+const current = Astro.url.pathname;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+</head>
+<body>
+<header>
+  <nav>
+    <a class="brand" href={`${base}/`}>Lutaro</a>
+    <div class="links">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<main>
+  <slot />
+</main>
+
+<footer>
+  <p>
+    Lutaro is an independent product — not made, owned, endorsed, or supported
+    by Sony. "Sony" and "α" are trademarks of their respective owners.
+  </p>
+</footer>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #86868b;
+    --bg: #fff;
+    --surface: #f5f5f7;
+    --border: #e3e3e6;
+    --link: #0066cc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-tertiary: #86868b;
+      --bg: #101012;
+      --surface: #1c1c1f;
+      --border: #333;
+      --link: #6cb2ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    color: var(--text);
+    background: var(--bg);
+  }
+  a { color: var(--link); }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.25rem; margin-top: 2.2rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+  ul, ol { padding-left: 1.25rem; }
+
+  header nav {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+  header .links {
+    display: flex;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+  }
+  header .links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.88em;
+  }
+  header .links a:hover { color: var(--text); }
+  header .links a[aria-current="page"] { color: var(--text); font-weight: 600; }
+
+  main {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  footer {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85em;
+    color: var(--text-tertiary);
+  }
+
+  .meta { color: var(--text-tertiary); margin-top: 0; }
+  .path {
+    display: block;
+    padding: 0.55rem 0.8rem;
+    margin: 0.6rem 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92em;
+  }
+  .note {
+    padding: 0.55rem 0.8rem;
+    margin: 0.6rem 0;
+    background: var(--surface);
+    border-radius: 8px;
+    font-size: 0.92em;
+    color: var(--text-secondary);
+  }
+  .overflow { overflow-x: auto; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92em;
+    margin: 0.6rem 0;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { font-weight: 600; }
+</style>
+</body>
+</html>
