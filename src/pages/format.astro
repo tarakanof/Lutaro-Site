@@ -1,0 +1,253 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base
+  title="Lutaro — Create a profile file"
+  description="How to hand-write a .profile file Lutaro can import: the key=value format, the full Picture Profile key reference, and downloadable examples."
+>
+  <h1>Create a profile file Lutaro can import</h1>
+  <p class="meta">The <code>.profile</code> format is plain text — hand-write one in under five minutes.</p>
+
+  <p>
+    Got Picture Profile settings from a YouTube video, a forum post, or a
+    friend's camera? You don't need Lutaro to create a file for you — a
+    <code>.profile</code> is a plain-text list of <code>key=value</code> lines
+    you can type in any text editor.
+  </p>
+
+  <h2 id="quick-start">1. Quick start</h2>
+  <p>Here's a complete, importable profile:</p>
+  <pre><code>name=My S-Cinetone Look
+author=Jane Doe
+gamma=S-Cinetone
+color_mode=S-Cinetone
+black_level=0
+saturation=0
+detail_level=-2
+</code></pre>
+  <p>
+    Save it as <code>My-Look.profile</code> (plain text, UTF-8) — then AirDrop
+    it to your iPhone, open it with Lutaro, or drag it into the Mac app.
+  </p>
+  <div class="note">
+    Only <code>name=</code> is required. Everything else is optional —
+    anything you leave out just uses the camera/app default.
+  </div>
+
+  <h2 id="format-rules">2. Format rules</h2>
+  <ul>
+    <li>One <code>key=value</code> per line.</li>
+    <li>
+      Lines starting with <code>#</code> (after trimming leading whitespace)
+      are comments and are ignored. A <code>#</code> that isn't the first
+      character of the line is just part of the value — e.g.
+      <code>name=Recipe #2</code> keeps the <code>#2</code>.
+    </li>
+    <li>
+      Keys are case-insensitive and normalized to lowercase with underscores
+      in place of spaces, so <code>Black_Level=</code>, <code>black level=</code>,
+      and <code>black_level=</code> all mean the same thing.
+    </li>
+    <li>
+      A line Lutaro doesn't recognize is kept as-is and never fails the
+      import — it round-trips untouched the next time the app rewrites the
+      file. Only a structurally broken line (no <code>=</code>, or nothing
+      before the <code>=</code>) fails to import.
+    </li>
+    <li>
+      Only <code>name=</code> is required. If it's missing, Lutaro uses the
+      file's own name (minus <code>.profile</code>) instead.
+    </li>
+    <li>
+      Numeric values outside a key's allowed range are clamped to the nearest
+      valid value on import — they're not rejected. Enum values (like a
+      <code>gamma=</code> or <code>color_mode=</code> label) aren't checked at
+      import time, but must match one of the allowed labels exactly (case
+      included) before that profile can be written to a camera.
+    </li>
+  </ul>
+
+  <h2 id="key-reference">3. Key reference</h2>
+  <h3>Metadata</h3>
+  <div class="overflow">
+    <table>
+      <tr><th>Key</th><th>Meaning</th><th>Notes</th></tr>
+      <tr><td><code>name</code></td><td>Display name</td>
+          <td>Required in spirit — falls back to the filename if omitted</td></tr>
+      <tr><td><code>author</code></td><td>Creator credit</td><td>Free text</td></tr>
+      <tr><td><code>notes</code></td><td>Description shown in the profile detail view</td>
+          <td>Free text</td></tr>
+      <tr><td><code>tags</code></td><td>Comma-separated tags for organizing the library</td>
+          <td>e.g. <code>tags=Cinematic, Warm</code></td></tr>
+      <tr><td><code>favorite</code></td><td>Marks the profile as a favorite</td>
+          <td><code>favorite=true</code></td></tr>
+      <tr><td><code>preview_image</code></td><td>Preview thumbnail</td>
+          <td>A filename kept next to the <code>.profile</code> file is simplest;
+          an absolute path or <code>~/…</code> also works</td></tr>
+    </table>
+  </div>
+  <div class="note">
+    Lutaro also writes a few internal keys of its own (<code>id</code>,
+    <code>slot</code>, <code>tags_escaped</code>, <code>white_balance</code>,
+    …) when it saves a profile. You don't need to write these by hand — and
+    if you do include unrelated lines, they're preserved rather than
+    rejected (see the format rules above).
+  </div>
+
+  <h3>Picture Profile settings</h3>
+  <p>
+    These are the 25 settings that make up a Picture Profile. Values are
+    copied verbatim from the app's schema.
+  </p>
+  <div class="overflow">
+    <table>
+      <tr><th>Key</th><th>Setting</th><th>Allowed values</th><th>Notes</th></tr>
+      <tr><td><code>black_level</code></td><td>Black Level</td><td>integer, −15…15</td><td></td></tr>
+      <tr><td><code>gamma</code></td><td>Gamma</td>
+          <td>Movie, Still, S-Cinetone, Cine1, Cine2, Cine3, Cine4, ITU709,
+          ITU709(800%), S-Log2, S-Log3, HLG, HLG1, HLG2, HLG3</td><td></td></tr>
+      <tr><td><code>black_gamma_range</code></td><td>Black Gamma Range</td>
+          <td>Wide, Middle, Narrow</td><td></td></tr>
+      <tr><td><code>black_gamma_level</code></td><td>Black Gamma Level</td>
+          <td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>knee_mode</code></td><td>Knee Mode</td>
+          <td>Auto, Manual</td><td></td></tr>
+      <tr><td><code>knee_auto_max_point</code></td><td>Knee Auto Max Point</td>
+          <td>percent, 90…109 (e.g. <code>100%</code>)</td>
+          <td>Used only when <code>knee_mode=Auto</code></td></tr>
+      <tr><td><code>knee_auto_sensitivity</code></td><td>Knee Auto Sensitivity</td>
+          <td>Low, Mid, High</td>
+          <td>Used only when <code>knee_mode=Auto</code></td></tr>
+      <tr><td><code>knee_manual_point</code></td><td>Knee Manual Point</td>
+          <td>percent, 75…109</td>
+          <td>Used only when <code>knee_mode=Manual</code></td></tr>
+      <tr><td><code>knee_manual_slope</code></td><td>Knee Manual Slope</td>
+          <td>integer, −5…5</td>
+          <td>Used only when <code>knee_mode=Manual</code></td></tr>
+      <tr><td><code>color_mode</code></td><td>Color Mode</td>
+          <td>Movie, Still, S-Cinetone, Cinema, Pro, ITU709 Matrix,
+          Black &amp; White, S-Gamut3.Cine, S-Gamut3, S-Gamut, BT.2020,
+          Rec.709, 709tone</td><td></td></tr>
+      <tr><td><code>saturation</code></td><td>Saturation</td><td>integer, −32…32</td><td></td></tr>
+      <tr><td><code>color_phase</code></td><td>Color Phase</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_red</code></td><td>Color Depth Red</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_green</code></td><td>Color Depth Green</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_blue</code></td><td>Color Depth Blue</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_cyan</code></td><td>Color Depth Cyan</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_magenta</code></td><td>Color Depth Magenta</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>color_depth_yellow</code></td><td>Color Depth Yellow</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>detail_level</code></td><td>Detail Level</td><td>integer, −7…7</td><td></td></tr>
+      <tr><td><code>detail_adjust_mode</code></td><td>Detail Adjust Mode</td>
+          <td>Auto, Manual</td><td></td></tr>
+      <tr><td><code>detail_adjust_vh_balance</code></td><td>Detail Adjust V/H Balance</td>
+          <td>integer, −2…2</td>
+          <td>Used only when <code>detail_adjust_mode=Manual</code></td></tr>
+      <tr><td><code>detail_adjust_bw_balance</code></td><td>Detail Adjust B/W Balance</td>
+          <td>integer, 0…4</td>
+          <td>Used only when <code>detail_adjust_mode=Manual</code></td></tr>
+      <tr><td><code>detail_adjust_limit</code></td><td>Detail Adjust Limit</td>
+          <td>integer, 0…7</td>
+          <td>Used only when <code>detail_adjust_mode=Manual</code></td></tr>
+      <tr><td><code>detail_adjust_crispening</code></td><td>Detail Adjust Crispening</td>
+          <td>integer, 0…7</td>
+          <td>Used only when <code>detail_adjust_mode=Manual</code></td></tr>
+      <tr><td><code>detail_adjust_highlight_detail</code></td><td>Detail Adjust Highlight Detail</td>
+          <td>integer, 0…4</td>
+          <td>Used only when <code>detail_adjust_mode=Manual</code></td></tr>
+    </table>
+  </div>
+
+  <h2 id="other-inputs">4. Other things you can import</h2>
+  <p>A single <code>.profile</code> file isn't the only thing Lutaro accepts:</p>
+  <ul>
+    <li>
+      <strong><code>.lutaroprofiles</code> package</strong> — what Lutaro
+      itself exports when you share profiles from the app. The recommended
+      way to hand someone a look, since it carries tags, previews, and
+      metadata losslessly.
+    </li>
+    <li>
+      <strong>A <code>.zip</code> of a package</strong> — for sharing across
+      platforms where a macOS package (which looks like a folder) wouldn't
+      survive transport intact.
+    </li>
+    <li>
+      <strong>A folder of loose <code>.profile</code> files</strong> — drop
+      the folder in and every <code>.profile</code> inside imports.
+    </li>
+    <li>
+      <strong>Markdown recipes (<code>.md</code>)</strong> — a legacy,
+      advanced format for pasting a whole recipe as one file. A heading
+      starts a new profile; only the bullet keys below are recognized
+      (anything else in the file is ignored):
+      <pre><code>## My Look
+
+- Black Level: -3
+- Gamma: S-Log3
+- Black Gamma: Wide +2
+- Knee: Auto 100% Mid
+- Color Mode: S-Gamut3.Cine
+- Saturation: -5
+- Color Phase: 0
+- Color Depth: R+2 G-1 B+0 C+0 M+0 Y+0
+- Detail Settings: Detail -2 Mode Manual V/H Balance 0 B/W Balance 2 Limit 4 Crispening 4 H-Light detail 2
+</code></pre>
+      Recognized fields: <code>Black Level</code>, <code>Gamma</code>,
+      <code>Black Gamma</code>, <code>Knee</code>, <code>Color Mode</code>,
+      <code>Saturation</code>, <code>Color Phase</code>,
+      <code>Color Depth</code>, and <code>Detail Settings</code>. A file can
+      hold several <code>##</code>-headed recipes; each becomes its own
+      profile. For a single look, the plain <code>.profile</code> format
+      above is simpler — use this only if you already have a recipe written
+      this way.
+    </li>
+  </ul>
+
+  <h2 id="examples">5. Downloadable examples</h2>
+  <p>
+    Three real, importable <code>.profile</code> files — download and drag
+    straight into Lutaro:
+  </p>
+  <ul>
+    <li>
+      <a href={`${base}/examples/S-Cinetone-Look.profile`} download>S-Cinetone-Look.profile</a>
+      — Sony's cinematic gamma + color mode, all adjustments at their defaults.
+    </li>
+    <li>
+      <a href={`${base}/examples/Rec709-Broadcast-Safe.profile`} download>Rec709-Broadcast-Safe.profile</a>
+      — a Rec.709-ish baseline (ITU709 gamma, Rec.709 color mode).
+    </li>
+    <li>
+      <a href={`${base}/examples/HLG3-HDR.profile`} download>HLG3-HDR.profile</a>
+      — HLG3 gamma paired with the BT.2020 color mode, for direct-to-display HDR.
+    </li>
+  </ul>
+
+  <h2 id="support">Questions?</h2>
+  <p>
+    Open an issue at
+    <a href="https://github.com/tarakanof/Lutaro-Site/issues">github.com/tarakanof/Lutaro-Site/issues</a>.
+  </p>
+
+  <p class="meta" style="margin-top: 3rem; font-size: 0.85em;">
+    Creative Look profiles are coming to Lutaro; this page will grow a second
+    key table once they ship.
+  </p>
+
+  <style>
+    pre {
+      padding: 0.8rem 1rem;
+      margin: 0.6rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88em;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+  </style>
+</Base>
