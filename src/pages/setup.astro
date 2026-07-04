@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Lutaro — Camera Setup Guide"
-  description="How to set up your Sony camera for Lutaro: Wi-Fi, PC Remote, Access Authentication, pairing, and USB — with exact menu paths for both menu generations."
+  description="How to set up your Sony camera for Lutaro: Wi-Fi, connecting away from home, PC Remote, Access Authentication, pairing, and USB — with exact menu paths for both menu generations."
 >
   <h1>Set up your Sony camera for Lutaro</h1>
   <p class="meta">Menu paths verified against Sony's official α6700 Help Guide · July 2026</p>
@@ -42,7 +42,55 @@ import Base from '../layouts/Base.astro';
     the camera won't join old WPA- or WEP-secured networks.
   </div>
 
-  <h2 id="pc-remote">2. Turn on PC Remote</h2>
+  <h2 id="away-from-home">2. Connecting away from home</h2>
+  <p>
+    No router to join? When the camera and your iPhone can't share a Wi-Fi
+    network, Lutaro can still find the camera over two field-friendly
+    connections, with manual IP entry as a universal fallback.
+  </p>
+
+  <h3>Camera as its own access point</h3>
+  <p>Turn the camera into a Wi-Fi access point and join it directly:</p>
+  <span class="path">MENU → Network → Cnct./PC Remote → PC Remote Function → Wi-Fi Direct Info</span>
+  <p>
+    Set the connection method to <strong>access point</strong>, then join
+    that network from your iPhone's Wi-Fi settings. The camera is always at
+    <strong>192.168.122.1</strong> in this mode.
+  </p>
+  <div class="note">
+    Lutaro finds the camera automatically in this mode as of the release
+    with the away-from-home scan fix. On an older version, enter
+    <strong>192.168.122.1</strong> manually (see below).
+  </div>
+
+  <h3>iPhone Personal Hotspot</h3>
+  <p>
+    Turn on Personal Hotspot on your iPhone and keep the Personal Hotspot
+    screen open so the camera can find it, then join it from the camera:
+  </p>
+  <span class="path">MENU → Network → Wi-Fi → Access Point Set.</span>
+  <p>
+    Default iPhone hotspot settings work as-is on the α6700 — no special
+    configuration needed.
+  </p>
+  <div class="note">
+    <strong>Camera can't see the hotspot?</strong> Set
+    <span class="path">MENU → Network → Wi-Fi → Wi-Fi Frequency Band</span>
+    to 2.4&nbsp;GHz on the camera. On iPhones that offer it, also try
+    <em>Maximize Compatibility</em> in the Personal Hotspot settings.
+  </div>
+
+  <h3>Manual IP entry</h3>
+  <p>
+    Works in any connection mode, and is the fallback if a scan doesn't find
+    the camera. In camera-as-access-point mode the address is always
+    <strong>192.168.122.1</strong>; on a hotspot or shared Wi-Fi network,
+    check the camera's own network settings screen for its current IP
+    address, then enter it in Lutaro under
+    <strong>Enter IP Manually</strong>.
+  </p>
+
+  <h2 id="pc-remote">3. Turn on PC Remote</h2>
   <p>This is the switch that lets Lutaro connect at all.</p>
   <div class="overflow">
     <table>
@@ -64,7 +112,7 @@ import Base from '../layouts/Base.astro';
     camera (half-press the shutter) and scan again.
   </div>
 
-  <h2 id="access-auth">3. Access Authentication — with or without a password</h2>
+  <h2 id="access-auth">4. Access Authentication — with or without a password</h2>
   <p>
     Sony cameras can protect remote connections with a user name and
     password. The setting is called <strong>Access Authen.</strong> and lives
@@ -99,7 +147,7 @@ import Base from '../layouts/Base.astro';
     until you enter the new one — the app will tell you when that happens.
   </div>
 
-  <h2 id="pairing">4. Pairing (only when Access Authen. is Off)</h2>
+  <h2 id="pairing">5. Pairing (only when Access Authen. is Off)</h2>
   <p>
     With Access Authen. <strong>Off</strong>, the first connection from a new
     device must be approved on the camera body:
@@ -132,7 +180,7 @@ import Base from '../layouts/Base.astro';
     Wi-Fi networks — you'll need step 1 again afterwards.
   </div>
 
-  <h2 id="usb">5. USB (Mac only)</h2>
+  <h2 id="usb">6. USB (Mac only)</h2>
   <p>
     On the Mac, Lutaro can also connect over a USB cable. Set the camera's
     USB mode to remote control:
@@ -144,12 +192,19 @@ import Base from '../layouts/Base.astro';
     <strong>Remote Shoot (PC Remote)</strong>.
   </p>
 
-  <h2 id="troubleshooting">6. Troubleshooting</h2>
+  <h2 id="troubleshooting">7. Troubleshooting</h2>
   <ul>
     <li>
       <strong>Camera not found on Wi-Fi</strong> — it's probably asleep; the
       camera drops Wi-Fi when idle. Wake it, confirm it's on the same network,
-      and confirm PC Remote (step 2) is On.
+      and confirm PC Remote (step 3) is On.
+    </li>
+    <li>
+      <strong>Scan finds nothing away from home</strong> — with no local
+      network, Lutaro shows a "No Local Network" screen and still checks any
+      recently-connected camera. To connect, use one of the three options
+      above: <a href="#away-from-home">camera-as-access-point, Personal
+      Hotspot, or manual IP entry</a>.
     </li>
     <li>
       <strong>"Camera is busy"</strong> — another app holds the connection.
@@ -171,7 +226,7 @@ import Base from '../layouts/Base.astro';
     </li>
     <li>
       <strong>Pairing prompt never appears</strong> — make sure the camera is
-      sitting in the <em>Pairing</em> menu (step 4) <em>before</em> you
+      sitting in the <em>Pairing</em> menu (step 5) <em>before</em> you
       connect from Lutaro.
     </li>
   </ul>
