@@ -8,6 +8,9 @@ Wi-Fi or USB.
 ## Links
 
 - **Camera setup guide:** https://tarakanof.github.io/Lutaro-Site/setup/
+- **Create a profile file:** https://tarakanof.github.io/Lutaro-Site/format/
+  — the `.profile` format, every key, and an AI prompt that writes one from
+  Reddit/YouTube/PDF settings
 - **Privacy policy:** https://tarakanof.github.io/Lutaro-Site/privacy/
 - **Support:** [open an issue](https://github.com/tarakanof/Lutaro-Site/issues)
   — bug reports, questions, and feature requests welcome

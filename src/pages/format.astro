@@ -1,0 +1,339 @@
+---
+import Base from '../layouts/Base.astro';
+import keys from '../data/profile-keys.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// --- Build the plain-text key reference shared by the on-page table and the
+// LLM prompt, both from the single-source data file so they can never drift.
+function valueText(k: any): string {
+  if (k.type === 'int') return `whole number ${k.min} to ${k.max}`;
+  if (k.type === 'percent') return `${k.min} to ${k.max} (percent, e.g. 100%)`;
+  if (k.type === 'enum') return `one of: ${k.enum.join(', ')}`;
+  if (k.type === 'enumRef') {
+    return k.enumRef === 'gammaOptions'
+      ? 'one of the gamma names (see the gamma list)'
+      : 'one of the colour-mode names (see the colour-mode list)';
+  }
+  return '';
+}
+
+// Plain-text table for the LLM prompt: every key, its meaning, its allowed
+// values, and the two full enum lists spelled out (the model has no other copy).
+const promptKeyLines = keys.groups
+  .flatMap((g: any) => g.keys)
+  .map((k: any) => {
+    let allowed: string;
+    if (k.type === 'enumRef') {
+      allowed =
+        k.enumRef === 'gammaOptions'
+          ? `one of: ${keys.gammaOptions.join(', ')}`
+          : `one of: ${keys.colorModeOptions.join(', ')}`;
+    } else {
+      allowed = valueText(k);
+    }
+    const cond = k.onlyWhen ? ` (only when ${k.onlyWhen})` : '';
+    return `${k.fileKey} — ${k.meaning} Allowed: ${allowed}.${cond}`;
+  })
+  .join('\n');
+
+const promptMetaLines = keys.metadataKeys
+  .map((m: any) => `${m.key} — ${m.meaning} (${m.values})`)
+  .join('\n');
+
+const llmPrompt = `You convert Sony camera Picture Profile settings into Lutaro ".profile" files.
+
+I will give you camera settings from a source (a Reddit post, a YouTube description, a PDF, or a photo of the camera menu). Turn ONLY what the source explicitly states into one or more .profile files.
+
+FILE FORMAT
+- Plain UTF-8 text, one "key=value" per line.
+- Keys are lowercase with underscores. Values are exact spellings from the tables below.
+- A line beginning with "#" is a comment. Only "name=" is essential.
+
+METADATA KEYS
+${promptMetaLines}
+
+PICTURE PROFILE KEYS
+${promptKeyLines}
+
+STRICT RULES — READ CAREFULLY
+1. Output ONLY keys the source states an explicit value for. Never fill in defaults, never infer or guess an omitted setting.
+2. Use the exact enum spellings from the tables above. If the source names a gamma, colour mode, or look that is NOT in the tables, do NOT substitute a similar one — record it verbatim in "notes=" instead.
+3. Anything ambiguous, unrecognised, or that has no matching key goes into "notes=" verbatim rather than being coerced into a key.
+4. Do not invent numbers. If the source says "slightly warm" with no value, put that phrase in notes=, don't write color_phase=-2.
+
+OUTPUT
+- Emit one fenced code block per profile. Each block is a complete .profile file.
+- After each block, tell me to save it as "<Name>.profile" (plain text, UTF-8), using the profile's name.
+- If the source describes several looks, produce one block each.
+
+Here are my settings:
+[PASTE YOUR SETTINGS HERE — or attach a screenshot / PDF]`;
+
+const exampleFiles = [
+  { file: 'Example-S-Cinetone.profile', label: 'Example S-Cinetone', note: 'The look Lutaro ships with — a gentle cinematic starting point.' },
+  { file: 'Rec709-Natural.profile', label: 'Rec.709 Natural', note: 'A ready-to-share SDR look on the standard Rec.709 gamma.' },
+  { file: 'HLG-Soft.profile', label: 'HLG Soft', note: 'An HLG3 / BT.2020 look for direct-to-display HDR.' },
+];
+---
+<Base
+  title="Lutaro — Create a profile file you can import"
+  description="How to write a Sony Picture Profile .profile file Lutaro can import: the format, every key and allowed value, an AI prompt that turns Reddit/YouTube/PDF settings into a file, and downloadable examples."
+>
+  <h1>Create a profile file Lutaro can import</h1>
+  <p class="meta">The <code>.profile</code> format, every key, and an AI prompt to write one for you</p>
+
+  <p>
+    A Lutaro profile is a plain text file. If you have camera settings from a
+    YouTube video, a Reddit post, or a page of notes, you can turn them into a
+    file Lutaro imports in a couple of minutes — by hand, or by letting an
+    <a href="#llm">AI write it for you</a>.
+  </p>
+
+  <h2 id="quick-start">1. Quick start</h2>
+  <p>Here is a complete, minimal profile:</p>
+  <div class="codeblock">
+    <button class="copy" data-copy="quick">Copy</button>
+    <pre id="quick"><code>name=My S-Cinetone Look
+author=Jane Doe
+gamma=S-Cinetone
+color_mode=S-Cinetone
+black_level=0
+saturation=0
+detail_level=-2</code></pre>
+  </div>
+  <p>
+    Save it as <code>My-Look.profile</code> (plain text, UTF-8). Then get it
+    onto a device with Lutaro:
+  </p>
+  <ul>
+    <li><strong>iPhone / iPad</strong> — AirDrop the file to your device and choose <em>Open with Lutaro</em>.</li>
+    <li><strong>Mac</strong> — drag the file into the Lutaro window.</li>
+  </ul>
+  <p>
+    You don't need every key — only <code>name=</code> really matters. Add as
+    much or as little as your source gives you.
+  </p>
+
+  <h2 id="rules">2. Format rules</h2>
+  <ul>
+    <li>One <code>key=value</code> per line.</li>
+    <li>
+      A line whose first non-blank character is <code>#</code> is a comment and
+      is ignored. A <code>#</code> anywhere else is an ordinary character —
+      <code>name=Look #2</code> keeps the <code>#2</code>.
+    </li>
+    <li>
+      Keys are case-insensitive and spaces become underscores, so
+      <code>Black Level</code>, <code>black_level</code>, and
+      <code>BLACK_LEVEL</code> all mean the same key.
+    </li>
+    <li>
+      Unknown keys are kept, never fatal — a line like
+      <code>my_note=whatever</code> is preserved untouched rather than
+      rejecting the file. (A line with no <code>=</code> at all, or an empty
+      key before the <code>=</code>, is the one thing that will make a file
+      fail to import.)
+    </li>
+    <li>
+      Only <code>name=</code> is needed. If you leave it out, Lutaro uses the
+      filename (without <code>.profile</code>) as the name.
+    </li>
+    <li>
+      Numbers outside a key's range are <strong>clamped</strong> to the nearest
+      allowed value on import, not rejected — so <code>black_level=50</code>
+      comes in as <code>15</code>. Enum values (like a gamma name) are kept
+      exactly as written; a spelling the app doesn't recognise is flagged in
+      the editor and won't be written to the camera, so copy the spellings from
+      the table below.
+    </li>
+  </ul>
+
+  <h2 id="keys">3. Key reference</h2>
+  <p>
+    Every Picture Profile setting Lutaro understands. Copy key names and the
+    allowed values exactly.
+  </p>
+  {keys.groups.map((group: any) => (
+    <>
+      <h3>{group.name}</h3>
+      <div class="overflow">
+        <table>
+          <tr><th>Key</th><th>Meaning</th><th>Allowed values</th></tr>
+          {group.keys.map((k: any) => (
+            <tr>
+              <td><code>{k.fileKey}</code></td>
+              <td>{k.meaning}{k.onlyWhen ? <><br /><em>Only used when {k.onlyWhen}.</em></> : null}</td>
+              <td>{valueText(k)}</td>
+            </tr>
+          ))}
+        </table>
+      </div>
+    </>
+  ))}
+
+  <h3>Gamma values</h3>
+  <p class="values">{keys.gammaOptions.map((g: string) => <code>{g}</code>)}</p>
+  <h3>Colour mode values</h3>
+  <p class="values">{keys.colorModeOptions.map((c: string) => <code>{c}</code>)}</p>
+
+  <h3>Metadata keys</h3>
+  <div class="overflow">
+    <table>
+      <tr><th>Key</th><th>Meaning</th><th>Example</th></tr>
+      {keys.metadataKeys.map((m: any) => (
+        <tr>
+          <td><code>{m.key}</code></td>
+          <td>{m.meaning}</td>
+          <td>{m.values}</td>
+        </tr>
+      ))}
+    </table>
+  </div>
+
+  <h2 id="llm">4. Have settings from Reddit, YouTube, or a PDF? Let an AI write the file.</h2>
+  <p>
+    Copy the prompt below into any chat AI (ChatGPT, Claude, Gemini, …), then
+    paste your source settings — or attach a screenshot or PDF — after it. A
+    photo of the camera menu works too, as long as the AI you use can read
+    images.
+  </p>
+  <div class="note">
+    <strong>Why the strict rules matter.</strong> AIs happily invent
+    plausible-looking values like <code>black_level=-7</code> when a source
+    doesn't state one. The prompt tells it to output <em>only</em> what the
+    source actually says and to drop anything else into <code>notes=</code>.
+    Skim the result before importing — you're about to write these to a camera.
+  </div>
+  <div class="codeblock">
+    <button class="copy" data-copy="prompt">Copy prompt</button>
+    <pre id="prompt"><code>{llmPrompt}</code></pre>
+  </div>
+  <p>
+    Save each fenced code block the AI returns as its own
+    <code>&lt;Name&gt;.profile</code> file, then import as above.
+  </p>
+
+  <h2 id="other-inputs">5. Other things Lutaro can import</h2>
+  <p>A single <code>.profile</code> file is the simplest case. Lutaro also accepts:</p>
+  <ul>
+    <li>
+      <strong><code>.lutaroprofiles</code> package</strong> — what Lutaro itself
+      exports. This is the best way to share looks: it carries names, tags,
+      notes, and preview images together. Just open or drag one in.
+    </li>
+    <li><strong>A <code>.zip</code></strong> of a <code>.lutaroprofiles</code> package.</li>
+    <li><strong>A folder</strong> of <code>.profile</code> files — every profile inside is imported.</li>
+    <li>
+      <strong>Markdown recipe sheets (<code>.md</code>)</strong> — see below.
+    </li>
+  </ul>
+  <h3>Markdown recipe sheets</h3>
+  <p>
+    Lutaro can read a specific Markdown shape used by shared "film recipe"
+    sheets: each recipe is a level-2 heading, followed by
+    <code>- Field: value</code> bullets. It recognises these fields:
+    <code>Black Level</code>, <code>Gamma</code>, <code>Black Gamma</code>,
+    <code>Knee</code>, <code>Color Mode</code>, <code>Saturation</code>,
+    <code>Color Phase</code>, <code>Color Depth</code>, and
+    <code>Detail Settings</code>. Imported recipes are tagged
+    <code>Film Recipe</code>.
+  </p>
+  <div class="codeblock">
+    <button class="copy" data-copy="md">Copy</button>
+    <pre id="md"><code>## Teal Sunset
+- Gamma: S-Cinetone
+- Color Mode: S-Cinetone
+- Black Level: 0
+- Saturation: -4
+- Color Depth: R+2 B-1
+- Detail Settings: Detail -3</code></pre>
+  </div>
+  <div class="note">
+    This Markdown reader is best-effort and forgiving by design — it's meant for
+    pasting existing recipe sheets, and it quietly skips anything it doesn't
+    recognise. For a look you want to keep exact, write a <code>.profile</code>
+    file (section 1) instead.
+  </div>
+
+  <h2 id="examples">6. Downloadable examples</h2>
+  <p>Real, ready-to-import profiles. Download one and open it in Lutaro to see the format in action.</p>
+  <ul class="examples">
+    {exampleFiles.map((ex) => (
+      <li>
+        <a href={`${base}/format/examples/${ex.file}`} download>{ex.label}</a>
+        <span> — {ex.note}</span>
+      </li>
+    ))}
+  </ul>
+
+  <div class="note" style="margin-top: 3rem;">
+    Creative Look profiles are coming; this page will grow a second key table
+    when they arrive.
+  </div>
+
+  <h2 id="support">Questions?</h2>
+  <p>
+    See the <a href={`${base}/setup/`}>camera setup guide</a>, or open an issue
+    at <a href="https://github.com/tarakanof/Lutaro-Site/issues">github.com/tarakanof/Lutaro-Site/issues</a>.
+  </p>
+
+  <style>
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.88em;
+      background: var(--surface);
+      padding: 0.1em 0.35em;
+      border-radius: 5px;
+    }
+    .codeblock { position: relative; margin: 0.8rem 0; }
+    .codeblock pre {
+      margin: 0;
+      padding: 0.9rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.86em;
+      line-height: 1.5;
+    }
+    .codeblock pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      white-space: pre;
+    }
+    .copy {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font: inherit;
+      font-size: 0.78em;
+      padding: 0.25rem 0.6rem;
+      color: var(--text-secondary);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      cursor: pointer;
+    }
+    .copy:hover { color: var(--text); }
+    .values code { margin: 0 0.3rem 0.4rem 0; display: inline-block; }
+    .examples { line-height: 1.9; }
+    .examples span { color: var(--text-secondary); font-size: 0.92em; }
+    td em { color: var(--text-tertiary); font-style: italic; }
+  </style>
+
+  <script is:inline>
+    document.querySelectorAll('.copy').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const el = document.getElementById(btn.getAttribute('data-copy'));
+        if (!el) return;
+        navigator.clipboard.writeText(el.innerText).then(() => {
+          const original = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(() => { btn.textContent = original; }, 1500);
+        });
+      });
+    });
+  </script>
+</Base>

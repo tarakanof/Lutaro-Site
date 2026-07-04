@@ -1,0 +1,68 @@
+{
+  "_comment": "SINGLE SOURCE OF TRUTH for the /format/ page. Every fileKey, enum label, and numeric range here is copied verbatim from the app's App/Core/Sources/PropertySchema.swift (the 25 Picture Profile definitions) and App/Core/Sources/ProfileIO.swift (metadata keys + parsing rules). Do NOT edit from memory. When Creative Look keys ship (app Slice 1/5), add a second group here and the table + LLM prompt both grow from it. Accuracy rule (issue #244): keys/enums/ranges must match the Swift source exactly.",
+  "profileURL": "https://tarakanof.github.io/Lutaro-Site/format/",
+  "gammaOptions": [
+    "Movie", "Still", "S-Cinetone",
+    "Cine1", "Cine2", "Cine3", "Cine4",
+    "ITU709", "ITU709(800%)",
+    "S-Log2", "S-Log3",
+    "HLG", "HLG1", "HLG2", "HLG3"
+  ],
+  "colorModeOptions": [
+    "Movie", "Still", "S-Cinetone",
+    "Cinema", "Pro",
+    "ITU709 Matrix", "Black & White",
+    "S-Gamut3.Cine", "S-Gamut3", "S-Gamut",
+    "BT.2020", "Rec.709", "709tone"
+  ],
+  "groups": [
+    {
+      "name": "Tonal",
+      "keys": [
+        { "fileKey": "black_level", "type": "int", "min": -15, "max": 15, "meaning": "Black point. Lower deepens blacks (more contrast); higher lifts shadows (a flatter look)." },
+        { "fileKey": "gamma", "type": "enumRef", "enumRef": "gammaOptions", "meaning": "The tone curve / dynamic-range mapping. See the gamma list below." },
+        { "fileKey": "black_gamma_range", "type": "enum", "enum": ["Wide", "Middle", "Narrow"], "meaning": "How much of the shadow region Black Gamma Level affects." },
+        { "fileKey": "black_gamma_level", "type": "int", "min": -7, "max": 7, "meaning": "Lifts (+) or crushes (−) the shadows within the Black Gamma Range." },
+        { "fileKey": "knee_mode", "type": "enum", "enum": ["Auto", "Manual"], "meaning": "How highlight compression is decided. Auto meters the scene; Manual sets the curve by hand." },
+        { "fileKey": "knee_auto_max_point", "type": "percent", "min": 90, "max": 109, "meaning": "Highest signal level the auto-knee will target.", "onlyWhen": "knee_mode = Auto" },
+        { "fileKey": "knee_auto_sensitivity", "type": "enum", "enum": ["Low", "Mid", "High"], "meaning": "How aggressively the auto-knee tracks bright scene content.", "onlyWhen": "knee_mode = Auto" },
+        { "fileKey": "knee_manual_point", "type": "percent", "min": 75, "max": 109, "meaning": "Signal level where highlight compression begins.", "onlyWhen": "knee_mode = Manual" },
+        { "fileKey": "knee_manual_slope", "type": "int", "min": -5, "max": 5, "meaning": "Steepness of the compression curve above the knee point.", "onlyWhen": "knee_mode = Manual" }
+      ]
+    },
+    {
+      "name": "Color",
+      "keys": [
+        { "fileKey": "color_mode", "type": "enumRef", "enumRef": "colorModeOptions", "meaning": "Colour space / matrix. See the colour-mode list below." },
+        { "fileKey": "saturation", "type": "int", "min": -32, "max": 32, "meaning": "Overall colour intensity across every hue." },
+        { "fileKey": "color_phase", "type": "int", "min": -7, "max": 7, "meaning": "Rotates the hue wheel. Negative → magenta/red; positive → green." },
+        { "fileKey": "color_depth_red", "type": "int", "min": -7, "max": 7, "meaning": "Density of red — deepens (+) or lightens (−) reds without shifting hue." },
+        { "fileKey": "color_depth_green", "type": "int", "min": -7, "max": 7, "meaning": "Density of green — foliage and the green component of skin tones." },
+        { "fileKey": "color_depth_blue", "type": "int", "min": -7, "max": 7, "meaning": "Density of blue — sky, water, and the cool side of shadows." },
+        { "fileKey": "color_depth_cyan", "type": "int", "min": -7, "max": 7, "meaning": "Density of cyan — water, sky, and the cool complement of skin." },
+        { "fileKey": "color_depth_magenta", "type": "int", "min": -7, "max": 7, "meaning": "Density of magenta — the red-blue blend in skin, florals, sunsets." },
+        { "fileKey": "color_depth_yellow", "type": "int", "min": -7, "max": 7, "meaning": "Density of yellow — foliage saturation, golden light, warm skin." }
+      ]
+    },
+    {
+      "name": "Detail",
+      "keys": [
+        { "fileKey": "detail_level", "type": "int", "min": -7, "max": 7, "meaning": "Overall in-camera sharpening. −7 softens; +7 boosts edge contrast." },
+        { "fileKey": "detail_adjust_mode", "type": "enum", "enum": ["Auto", "Manual"], "meaning": "Use the camera's default detail tuning (Auto) or the five manual values below." },
+        { "fileKey": "detail_adjust_vh_balance", "type": "int", "min": -2, "max": 2, "meaning": "Vertical vs. horizontal sharpening emphasis.", "onlyWhen": "detail_adjust_mode = Manual" },
+        { "fileKey": "detail_adjust_bw_balance", "type": "int", "min": 0, "max": 4, "meaning": "Sharpening emphasis on dark edges vs. bright edges.", "onlyWhen": "detail_adjust_mode = Manual" },
+        { "fileKey": "detail_adjust_limit", "type": "int", "min": 0, "max": 7, "meaning": "Cap on how much sharpening any single edge can get.", "onlyWhen": "detail_adjust_mode = Manual" },
+        { "fileKey": "detail_adjust_crispening", "type": "int", "min": 0, "max": 7, "meaning": "Suppresses low-amplitude sharpening — keeps flat areas clean.", "onlyWhen": "detail_adjust_mode = Manual" },
+        { "fileKey": "detail_adjust_highlight_detail", "type": "int", "min": 0, "max": 4, "meaning": "How much sharpening is applied within bright highlights.", "onlyWhen": "detail_adjust_mode = Manual" }
+      ]
+    }
+  ],
+  "metadataKeys": [
+    { "key": "name", "meaning": "Profile name. The only key Lutaro needs — if omitted, the filename (without .profile) is used.", "values": "any text; required in practice" },
+    { "key": "author", "meaning": "Who created the look. Optional; shown in the library.", "values": "any text" },
+    { "key": "notes", "meaning": "Free-text notes. Optional. Use this for anything the source states that has no key of its own.", "values": "any text" },
+    { "key": "tags", "meaning": "Comma-separated tags used to organize the library.", "values": "e.g. tags=cinematic, warm, indoor" },
+    { "key": "favorite", "meaning": "Marks the profile as a favourite. Optional.", "values": "true or false" },
+    { "key": "preview_image", "meaning": "A sample image shown with the profile. Give the filename of an image sitting next to the .profile file — not a path.", "values": "e.g. preview_image=My-Look.jpg" }
+  ]
+}
