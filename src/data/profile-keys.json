@@ -120,14 +120,14 @@
           "fileKey": "color_mode",
           "type": "enumRef",
           "enumRef": "colorModeOptions",
-          "meaning": "Colour space / matrix. See the colour-mode list below."
+          "meaning": "Color space / matrix. See the color-mode list below."
         },
         {
           "fileKey": "saturation",
           "type": "int",
           "min": -32,
           "max": 32,
-          "meaning": "Overall colour intensity across every hue."
+          "meaning": "Overall color intensity across every hue."
         },
         {
           "fileKey": "color_phase",
@@ -141,42 +141,42 @@
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of red — deepens (+) or lightens (−) reds without shifting hue."
+          "meaning": "Density of red - deepens (+) or lightens (−) reds without shifting hue."
         },
         {
           "fileKey": "color_depth_green",
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of green — foliage and the green component of skin tones."
+          "meaning": "Density of green - foliage and the green component of skin tones."
         },
         {
           "fileKey": "color_depth_blue",
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of blue — sky, water, and the cool side of shadows."
+          "meaning": "Density of blue - sky, water, and the cool side of shadows."
         },
         {
           "fileKey": "color_depth_cyan",
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of cyan — water, sky, and the cool complement of skin."
+          "meaning": "Density of cyan - water, sky, and the cool complement of skin."
         },
         {
           "fileKey": "color_depth_magenta",
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of magenta — the red-blue blend in skin, florals, sunsets."
+          "meaning": "Density of magenta - the red-blue blend in skin, florals, sunsets."
         },
         {
           "fileKey": "color_depth_yellow",
           "type": "int",
           "min": -7,
           "max": 7,
-          "meaning": "Density of yellow — foliage saturation, golden light, warm skin."
+          "meaning": "Density of yellow - foliage saturation, golden light, warm skin."
         }
       ]
     },
@@ -228,7 +228,7 @@
           "type": "int",
           "min": 0,
           "max": 7,
-          "meaning": "Suppresses low-amplitude sharpening — keeps flat areas clean.",
+          "meaning": "Suppresses low-amplitude sharpening - keeps flat areas clean.",
           "onlyWhen": "detail_adjust_mode = Manual"
         },
         {
@@ -245,12 +245,12 @@
   "metadataKeys": [
     {
       "key": "name",
-      "meaning": "Profile name. The only key Lutaro needs — if omitted, the filename (without .profile) is used.",
+      "meaning": "Profile name. The only key Lutaro needs - if omitted, the filename (without .profile) is used.",
       "values": "any text; required in practice"
     },
     {
       "key": "profile_kind",
-      "meaning": "What kind of profile the file holds. Omit it for a Picture Profile — that is the default.",
+      "meaning": "What kind of profile the file holds. Omit it for a Picture Profile - that is the default.",
       "values": "picture_profile (default) or creative_look"
     },
     {
