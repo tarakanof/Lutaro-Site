@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Lutaro — Camera Setup Guide"
-  description="How to set up your Sony camera for Lutaro: Wi-Fi, connecting away from home, PC Remote, Access Authentication, pairing, and USB — with exact menu paths for both menu generations."
+  description="How to set up your Sony camera for Lutaro: Wi-Fi, Bluetooth connect in the field, PC Remote, Access Authentication, pairing, and USB — with exact menu paths for both menu generations."
 >
   <h1>Set up your Sony camera for Lutaro</h1>
   <p class="meta">Menu paths verified against Sony's official α6700 Help Guide · July 2026</p>
@@ -45,23 +45,41 @@ import Base from '../layouts/Base.astro';
   <h2 id="away-from-home">2. Connecting away from home</h2>
   <p>
     No router to join? When the camera and your iPhone can't share a Wi-Fi
-    network, Lutaro can still find the camera over two field-friendly
-    connections, with manual IP entry as a universal fallback.
+    network, Lutaro can still connect several field-friendly ways — the
+    easiest is Bluetooth, where Lutaro has the camera start its own hotspot
+    and joins it for you — with manual IP entry as a universal fallback.
   </p>
 
-  <h3>Camera as its own access point</h3>
-  <p>Turn the camera into a Wi-Fi access point and join it directly:</p>
+  <h3 id="bluetooth">Bluetooth (easiest): Lutaro starts the camera's hotspot</h3>
+  <p>
+    On iPhone and iPad, Lutaro can tell the camera over Bluetooth to bring up
+    its own Wi-Fi hotspot, then connect through it — the same way Sony's
+    Creators' App connects in the field. One-time camera setup:
+  </p>
+  <span class="path">MENU → Network → Bluetooth → Bluetooth Function = On</span>
+  <span class="path">MENU → Network → Bluetooth → Pairing</span>
+  <p>
+    Open <em>Pairing</em> on the camera, then start the Bluetooth connection
+    in Lutaro and approve the prompt on the camera screen. Optionally, let
+    Lutaro also <em>wake</em> a powered-off camera:
+  </p>
+  <span class="path">MENU → Network → Cnct./PC Remote → Cnct. while Power OFF = On</span>
+  <div class="note">
+    When you connect through the camera's own hotspot, leave
+    <em>Wi-Fi Connect</em> (step 1) <strong>off</strong> — the hotspot needs
+    it off. A camera woken from OFF over Bluetooth comes up in hotspot mode;
+    it won't join your home Wi-Fi until you power it on normally.
+  </div>
+
+  <h3>Camera as its own access point (manual)</h3>
+  <p>No Bluetooth pairing? Turn the camera into a Wi-Fi access point from its own menu and join it directly:</p>
   <span class="path">MENU → Network → Cnct./PC Remote → PC Remote Function → Wi-Fi Direct Info</span>
   <p>
     That screen shows the camera's own Wi-Fi network name and password — join
     it from your iPhone's Wi-Fi settings. The camera is always at
-    <strong>192.168.122.1</strong> in this mode.
+    <strong>192.168.122.1</strong> in this mode, and Lutaro finds it there
+    automatically.
   </p>
-  <div class="note">
-    Lutaro finds the camera automatically in this mode as of the release
-    with the away-from-home scan fix. On an older version, enter
-    <strong>192.168.122.1</strong> manually (see below).
-  </div>
 
   <h3>iPhone Personal Hotspot</h3>
   <p>
@@ -228,6 +246,21 @@ import Base from '../layouts/Base.astro';
       <strong>Pairing prompt never appears</strong> — make sure the camera is
       sitting in the <em>Pairing</em> menu (step 5) <em>before</em> you
       connect from Lutaro.
+    </li>
+    <li>
+      <strong>Camera won't wake over Bluetooth</strong> — waking needs all of:
+      <em>Bluetooth Function</em> On, the camera paired with this phone
+      (<a href="#bluetooth">above</a>), and
+      <em>Cnct. while Power OFF</em> On. If the Bluetooth connection keeps
+      failing right away, the pairing may be stale: forget the camera in the
+      iPhone's Bluetooth settings, then re-pair from
+      <em>Network → Bluetooth → Pairing</em>.
+    </li>
+    <li>
+      <strong>Can't join the camera's hotspot</strong> — check for a system
+      Wi-Fi prompt and allow the join. If your phone can't see the camera's
+      hotspot at all, set
+      <em>Network → Wi-Fi → Wi-Fi Frequency Band</em> to 2.4&nbsp;GHz.
     </li>
   </ul>
 
