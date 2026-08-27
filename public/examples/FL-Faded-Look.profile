@@ -1,0 +1,9 @@
+name=FL Faded Look
+profile_kind=creative_look
+author=Lutaro
+tags=Creative Look
+notes=A Creative Look recipe: the FL base style with a gentle fade and softened contrast. All other adjustments left at the camera's defaults.
+base_style=FL
+cl_contrast=-2
+cl_fade=3
+cl_saturation=-1

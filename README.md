@@ -1,12 +1,13 @@
 # Lutaro
 
 Public site and support hub for **Lutaro** — a native iPhone, iPad, and Mac app
-for managing Sony camera **Picture Profiles**. Build a reusable library of
-looks, organize them with tags, and write them to your camera's PP slots over
-Wi-Fi or USB.
+for managing Sony camera **Picture Profiles** and **Creative Looks**. Build a
+reusable library of looks, organize them with tags, and write them to your
+camera's slots over Wi-Fi or USB.
 
 ## Links
 
+- **App Store:** https://apps.apple.com/app/lutaro/id6799778506
 - **Camera setup guide:** https://tarakanof.github.io/Lutaro-Site/setup/
 - **Create a profile file:** https://tarakanof.github.io/Lutaro-Site/format/
 - **Privacy policy:** https://tarakanof.github.io/Lutaro-Site/privacy/

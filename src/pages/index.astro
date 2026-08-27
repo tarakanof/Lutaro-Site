@@ -3,18 +3,19 @@ import Base from '../layouts/Base.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Base
-  title="Lutaro — Sony Picture Profile manager for iPhone, iPad, and Mac"
-  description="Lutaro is a native iPhone, iPad, and Mac app for managing Sony camera Picture Profiles: build a reusable library of looks and write them to your camera over Wi-Fi or USB."
+  title="Lutaro — Sony Picture Profile & Creative Look manager for iPhone, iPad, and Mac"
+  description="Lutaro is a native iPhone, iPad, and Mac app for managing Sony camera Picture Profiles and Creative Looks: build a reusable library of looks and write them to your camera over Wi-Fi or USB."
 >
   <section class="hero">
     <h1>Your Picture Profiles, finally a library.</h1>
     <p class="tagline">
       Lutaro is a native iPhone, iPad, and Mac app for Sony cameras. Build a
-      reusable library of Picture Profile looks, organize them with tags, and
-      write them to your camera's PP slots over Wi-Fi or USB.
+      reusable library of Picture Profiles and Creative Looks, organize them
+      with tags, and write them to your camera's slots over Wi-Fi or USB.
     </p>
     <div class="cta">
-      <a class="button primary" href={`${base}/setup/`}>Camera setup guide</a>
+      <a class="button primary" href="https://apps.apple.com/app/lutaro/id6799778506">Download on the App&nbsp;Store</a>
+      <a class="button" href={`${base}/setup/`}>Camera setup guide</a>
       <a class="button" href={`${base}/format/`}>Create a profile file</a>
       <a class="button" href="https://github.com/tarakanof/Lutaro-Site/issues">Support</a>
     </div>
