@@ -150,7 +150,10 @@ test('the RX100 VII stays out of the verified list while its support is document
   );
   const rx100 = view.documented.find((camera) => camera.bodyCode === 'DSC-RX100M7');
   assert.ok(rx100, 'it belongs in the Sony-documented list instead');
-  assert.deepEqual(rx100.carrierMarks, { 'USB cable': 'yes', 'Wi-Fi': 'unstated' });
+  // Sony's README 2.02.00 interface table leaves the IP column blank for this
+  // body, recorded upstream as ptpIP: unsupported - so Wi-Fi is "not covered",
+  // which is a stronger statement than the "not stated" it used to render.
+  assert.deepEqual(rx100.carrierMarks, { 'USB cable': 'yes', 'Wi-Fi': 'no' });
   assert.equal(rx100.pictureProfile, 'Selector only');
   assert.equal(view.withheld, 0);
 });

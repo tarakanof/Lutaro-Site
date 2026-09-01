@@ -10,6 +10,10 @@
           "provenance": "sonyDocumentation",
           "value": "selectorOnly"
         },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
         "usbPTP": {
           "provenance": "sonyDocumentation",
           "value": "supported"
@@ -32,7 +36,7 @@
           "value": "full"
         },
         "ptpIP": {
-          "provenance": "reviewedHardwareReport",
+          "provenance": "both",
           "value": "supported"
         },
         "usbPTP": {
