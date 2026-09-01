@@ -23,13 +23,14 @@ const CLAIM_VOCABULARY = {
   pictureProfile: ['full', 'selectorOnly', 'none'],
   remoteShutter: ['supported', 'unsupported'],
   liveView: ['supported', 'unsupported'],
-  // Not in the upstream schema yet (Lutaro#1503). Accepted here ahead of time so
-  // the day they land the export does not fail this build - a refusal is right
-  // for a TYPO, wrong for a field the catalog owner told us is coming. Both
-  // plausible vocabularies are allowed until upstream picks one; the label map
-  // below covers every value in them.
-  creativeLook: ['full', 'selectorOnly', 'none', 'supported', 'unsupported'],
-  creativeStyle: ['full', 'selectorOnly', 'none', 'supported', 'unsupported'],
+  // Landing upstream in Lutaro#1503's schema step, after the body set. Accepted
+  // here ahead of time so the export does not hard-fail this build the day it
+  // gains them - a refusal is right for a TYPO, wrong for a field the catalog
+  // owner has said is coming. Vocabularies confirmed by the catalog owner: the
+  // two look fields take the Picture Profile tri-level, bluetooth is a plain
+  // capability.
+  creativeLook: ['full', 'selectorOnly', 'none'],
+  creativeStyle: ['full', 'selectorOnly', 'none'],
   bluetooth: ['supported', 'unsupported'],
 };
 
@@ -246,7 +247,7 @@ function featureSupport(entry, field, feature) {
 function lookSupport(entry, field) {
   const claim = entry.claims[field];
   if (!claim) return { ...NOT_REVIEWED, source: '' };
-  const tone = { full: 'yes', supported: 'yes', selectorOnly: 'partial', none: 'no', unsupported: 'no' };
+  const tone = { full: 'yes', selectorOnly: 'partial', none: 'no' };
   return {
     label: FEATURE_LABELS[claim.value],
     tone: tone[claim.value],

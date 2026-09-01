@@ -231,6 +231,33 @@ test('unresolved divergences survive into the evidence note', () => {
   assert.match(camera.evidence.divergences[0], /pictureProfile/);
 });
 
+test('the fields arriving from Lutaro#1503 are accepted with their agreed vocabulary', () => {
+  // Pre-accepted so the export does not hard-fail this build the day it gains
+  // them. Pinned to the vocabulary the catalog owner confirmed, so a drift on
+  // either side is a failing test here rather than a broken deploy.
+  const entry = reviewedEntry();
+  entry.claims.creativeLook = { value: 'selectorOnly', provenance: 'reviewedHardwareReport' };
+  entry.claims.creativeStyle = { value: 'none', provenance: 'sonyDocumentation' };
+  entry.claims.bluetooth = { value: 'supported', provenance: 'reviewedHardwareReport' };
+  const [camera] = catalogView(wrap(entry)).cameras;
+  assert.equal(camera.creativeLook.label, 'Selector only');
+  assert.equal(camera.creativeLook.tone, 'partial');
+  assert.equal(camera.creativeStyle.label, 'Unavailable');
+  assert.equal(camera.bluetooth.label, 'Supported');
+
+  // The look fields take the PP tri-level, NOT supported/unsupported.
+  const wrongVocabulary = reviewedEntry();
+  wrongVocabulary.claims.creativeLook = { value: 'supported', provenance: 'both' };
+  assert.throws(() => loadCatalog(wrap(wrongVocabulary)), CatalogError);
+
+  // bluetooth is a capability, and is never treated as a connection route.
+  const bt = reviewedEntry();
+  bt.claims.usbPTP = { value: 'unsupported', provenance: 'reviewedHardwareReport' };
+  bt.claims.ptpIP = { value: 'unsupported', provenance: 'reviewedHardwareReport' };
+  bt.claims.bluetooth = { value: 'supported', provenance: 'reviewedHardwareReport' };
+  assert.equal(publicationDecision(bt).published, false, 'BLE alone is not a route');
+});
+
 test('cameras are sorted by marketing name', () => {
   const zeta = { ...reviewedEntry(), bodyCode: 'ILCE-1', marketingName: 'Zeta' };
   const alpha = { ...reviewedEntry(), bodyCode: 'ILCE-2', marketingName: 'Alpha' };
