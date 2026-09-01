@@ -12,7 +12,8 @@ camera's slots over Wi-Fi or USB.
 - **Create a profile file:** https://tarakanof.github.io/Lutaro-Site/format/
 - **Camera compatibility:** https://tarakanof.github.io/Lutaro-Site/compatibility/
 - **Privacy policy:** https://tarakanof.github.io/Lutaro-Site/privacy/
-- **Support:** [open an issue](https://github.com/tarakanof/Lutaro-Site/issues)
+- **Support:** https://tarakanof.github.io/Lutaro-Site/support/ - email
+  <lutaro@akitaka.me>, or [open an issue](https://github.com/tarakanof/Lutaro-Site/issues)
   (bug reports, questions, and feature requests welcome)
 
 ## Privacy in one line
@@ -25,7 +26,7 @@ Your profile library stays on your device (or in your own iCloud). See the
 
 Lutaro is an independent product - not made, owned, endorsed, or supported by
 Sony. "Sony" and "α" are trademarks of their respective owners. Support for
-Lutaro is provided here, not by Sony.
+Lutaro is provided by the developer (<lutaro@akitaka.me>), not by Sony.
 
 ---
 
