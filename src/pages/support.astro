@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base
+  title="Lutaro - Support"
+  description="How to get help with Lutaro: email the developer, or open an issue. Includes what to send when a camera will not connect."
+>
+  <h1>Support</h1>
+  <p>
+    Lutaro is made by one developer. Both routes below reach the same person -
+    pick whichever you prefer.
+  </p>
+
+  <h2>Email</h2>
+  <p>
+    <a href="mailto:lutaro@akitaka.me">lutaro@akitaka.me</a> - questions, bug
+    reports, and requests for a camera Lutaro does not support yet. Email is
+    the right route if you would rather not post in public, or if you are
+    sending a diagnostics report.
+  </p>
+
+  <h2>Issue tracker</h2>
+  <p>
+    <a href="https://github.com/tarakanof/Lutaro-Site/issues">github.com/tarakanof/Lutaro-Site/issues</a>
+    - public, and the better place for anything other users may hit too.
+  </p>
+
+  <h2>If your camera will not connect</h2>
+  <p>
+    Send a diagnostics report. The app builds it on your device from a small
+    log of recent connection events, and it answers most of the questions a
+    reply would otherwise have to ask.
+  </p>
+  <ul>
+    <li>
+      <strong>iPhone and iPad:</strong> Settings &rsaquo; Diagnostics &rsaquo;
+      Prepare Report, then choose <em>Email to the Developer</em> in the share
+      sheet. The report is attached for you.
+    </li>
+    <li>
+      <strong>Mac:</strong> Settings &rsaquo; Diagnostics &rsaquo; Export
+      Diagnostics, then attach the saved <code>.zip</code> to an email.
+    </li>
+  </ul>
+  <p>
+    Reports are redacted by default - network addresses and serial numbers are
+    masked. Only send a full-details report if I ask for one. Nothing is sent
+    anywhere until you tap Send yourself; see the
+    <a href={`${base}/privacy/`}>privacy policy</a>.
+  </p>
+
+  <h2>Asking about a camera</h2>
+  <p>
+    Check the <a href={`${base}/compatibility/`}>compatibility list</a> first.
+    If your body is not on it, the most useful thing you can send is the
+    <em>Check Camera Compatibility</em> report from the same Diagnostics
+    screen, taken while the camera is connected - it says exactly which
+    Picture Profile data that body exposes.
+  </p>
+</Base>
