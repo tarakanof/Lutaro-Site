@@ -23,6 +23,14 @@ const CLAIM_VOCABULARY = {
   pictureProfile: ['full', 'selectorOnly', 'none'],
   remoteShutter: ['supported', 'unsupported'],
   liveView: ['supported', 'unsupported'],
+  // Not in the upstream schema yet (Lutaro#1503). Accepted here ahead of time so
+  // the day they land the export does not fail this build - a refusal is right
+  // for a TYPO, wrong for a field the catalog owner told us is coming. Both
+  // plausible vocabularies are allowed until upstream picks one; the label map
+  // below covers every value in them.
+  creativeLook: ['full', 'selectorOnly', 'none', 'supported', 'unsupported'],
+  creativeStyle: ['full', 'selectorOnly', 'none', 'supported', 'unsupported'],
+  bluetooth: ['supported', 'unsupported'],
 };
 
 const PROVENANCE_VOCABULARY = ['sonyDocumentation', 'reviewedHardwareReport', 'both'];
@@ -231,6 +239,22 @@ function featureSupport(entry, field, feature) {
       };
 }
 
+/**
+ * Creative Look / Creative Style, which may arrive with either the Picture
+ * Profile vocabulary or the plain supported/unsupported one.
+ */
+function lookSupport(entry, field) {
+  const claim = entry.claims[field];
+  if (!claim) return { ...NOT_REVIEWED, source: '' };
+  const tone = { full: 'yes', supported: 'yes', selectorOnly: 'partial', none: 'no', unsupported: 'no' };
+  return {
+    label: FEATURE_LABELS[claim.value],
+    tone: tone[claim.value],
+    detail: '',
+    source: EVIDENCE_LABELS[claim.provenance],
+  };
+}
+
 function firmwareNote(scope) {
   if (scope.kind === 'minimum') return `Firmware ${scope.value} or later`;
   if (scope.kind === 'exact') return `Firmware ${scope.value}`;
@@ -268,11 +292,11 @@ function entryView(entry) {
       source: platformProvenance(entry, platform),
     })),
     pictureProfile,
-    // Creative Look and Creative Style are two different Sony features and the
-    // catalog carries a claim for neither yet, so both render as "not reviewed"
-    // rather than being folded into the Picture Profile verdict.
-    creativeLook: { ...NOT_REVIEWED, source: '' },
-    creativeStyle: { ...NOT_REVIEWED, source: '' },
+    // Two different Sony features, never folded into each other or into the
+    // Picture Profile verdict. Absent until Lutaro#1503 adds the claim fields.
+    creativeLook: lookSupport(entry, 'creativeLook'),
+    creativeStyle: lookSupport(entry, 'creativeStyle'),
+    bluetooth: featureSupport(entry, 'bluetooth', 'Bluetooth setup'),
     remoteShutter: featureSupport(entry, 'remoteShutter', 'remote shutter release'),
     liveView: featureSupport(entry, 'liveView', 'live view'),
     evidence: {
@@ -289,6 +313,25 @@ function entryView(entry) {
 
 /** Carrier names as a reader knows them. */
 const CARRIER_NAMES = { usbPTP: 'USB cable', ptpIP: 'Wi-Fi' };
+
+/**
+ * Bluetooth is NOT a carrier and never appears in `CARRIERS`. Lutaro speaks the
+ * command set over USB or IP only; BLE is how it gets the camera onto Wi-Fi in
+ * the first place - asking the body to start its own hotspot, and waking a
+ * sleeping one. Treating it as a third route would promise a connection it
+ * cannot carry.
+ */
+const FEATURE_LABELS = {
+  full: 'Full',
+  selectorOnly: 'Selector only',
+  none: 'Unavailable',
+  supported: 'Yes',
+  unsupported: 'No',
+};
+
+function featureCell(claim) {
+  return claim ? FEATURE_LABELS[claim.value] : '';
+}
 
 /**
  * A body Sony's tables cover but Lutaro has never been run against.
@@ -318,6 +361,12 @@ function documentedView(entry) {
     marketingName: entry.marketingName,
     aliases: entry.aliases ?? [],
     carrierMarks,
+    bluetooth: entry.claims.bluetooth
+      ? entry.claims.bluetooth.value === 'supported'
+        ? 'yes'
+        : 'no'
+      : 'unstated',
+    creativeLook: featureCell(entry.claims.creativeLook),
     documented: CARRIERS.filter((c) => entry.claims[c]?.value === 'supported').map(
       (c) => CARRIER_NAMES[c],
     ),

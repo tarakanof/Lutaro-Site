@@ -41,6 +41,13 @@ const CARRIER_WORD = {
     can talk to the body at all, over a USB cable or over Wi-Fi.
     <em>Features</em> are what it can do once connected. A camera can connect
     fine and still expose only part of the Picture Profile system.
+    <br /><br />
+    <strong>Bluetooth is neither.</strong> Lutaro never carries camera commands
+    over Bluetooth - it uses BLE to ask the camera to start its own Wi-Fi
+    hotspot, and to wake a sleeping body, then does the real work over Wi-Fi.
+    It is how you get connected away from a router, not a connection route of
+    its own. Setting it up is in the
+    <a href={`${base}/setup/#bluetooth`}>setup guide</a>.
   </div>
 
   <h2 id="reviewed">Verified by Lutaro</h2>
@@ -78,6 +85,14 @@ const CARRIER_WORD = {
               </dd>
             </div>
           ))}
+          <div class="row">
+            <dt>Bluetooth setup</dt>
+            <dd>
+              <span class={`badge ${camera.bluetooth.tone}`}>{camera.bluetooth.label}</span>
+              {camera.bluetooth.detail && <span class="detail">{camera.bluetooth.detail}</span>}
+              {camera.bluetooth.source && <span class="detail source">Evidence: {camera.bluetooth.source}.</span>}
+            </dd>
+          </div>
           <div class="row">
             <dt>Picture Profiles</dt>
             <dd>
@@ -164,7 +179,9 @@ const CARRIER_WORD = {
             <th scope="col">Camera</th>
             <th scope="col">USB</th>
             <th scope="col">Wi-Fi</th>
+            <th scope="col">Bluetooth</th>
             <th scope="col">Picture&nbsp;Profile</th>
+            <th scope="col">Creative&nbsp;Look</th>
           </tr>
         </thead>
         <tbody>
@@ -185,13 +202,27 @@ const CARRIER_WORD = {
                   <span class="sr-only">{CARRIER_WORD[camera.carrierMarks[carrier]]}</span>
                 </td>
               ))}
+              <td class={`mark ${camera.bluetooth}`}>
+                <span aria-hidden="true">{CARRIER_GLYPH[camera.bluetooth]}</span>
+                <span class="sr-only">{CARRIER_WORD[camera.bluetooth]}</span>
+              </td>
               <td class="pp">{camera.pictureProfile || 'Not stated'}</td>
+              <td class="pp">{camera.creativeLook || 'Not stated'}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   )}
+
+  <div class="note">
+    <strong>Picture Profile column.</strong> <em>Full</em> means Lutaro can read
+    every setting inside a PP slot and write a whole profile into it - the point
+    of the app. <em>Selector only</em> means the body exposes just the slot
+    switch: Lutaro can change which PP the camera is on, but cannot read or
+    write what is inside one, so a profile from your library cannot be applied
+    to that body. <em>Unavailable</em> means no Picture Profile control at all.
+  </div>
 
   <p class="meta">
     Every value above is what Sony's tables state, not a Lutaro test result.
@@ -224,6 +255,13 @@ const CARRIER_WORD = {
       custom looks on recent bodies); <strong>Creative Style</strong> is the
       older preset system it replaced. A body can have one, the other, or
       neither, so neither verdict implies the other.
+    </dd>
+    <dt>Bluetooth setup</dt>
+    <dd>
+      Whether Lutaro can use Bluetooth on this body to start its Wi-Fi hotspot
+      and wake it from sleep. It is a way of <em>reaching</em> the camera when
+      there is no network to share, not a way of talking to it - every command
+      still travels over Wi-Fi or the cable afterwards.
     </dd>
     <dt>Not reviewed</dt>
     <dd>
