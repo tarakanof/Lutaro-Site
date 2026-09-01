@@ -1,0 +1,279 @@
+---
+import Base from '../layouts/Base.astro';
+import { catalogView } from '../lib/camera-catalog.mjs';
+import artifact from '../data/camera-support-catalog.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Throws on an unknown schema or a missing display field, which fails the build.
+const { cameras, withheld } = catalogView(artifact);
+---
+<Base
+  title="Lutaro - Sony camera compatibility"
+  description="Which Sony cameras Lutaro connects to, over USB or Wi-Fi, and at what Picture Profile level. Reviewed evidence only, with the Sony model code and review date for every entry. Lutaro is an independent app and is not affiliated with Sony."
+>
+  <h1>Sony camera compatibility</h1>
+  <p class="meta">
+    Reviewed evidence only. Last review in this list:
+    {cameras.length > 0
+      ? cameras.map((camera) => camera.evidence.reviewDate).sort().at(-1)
+      : 'none yet'}.
+  </p>
+
+  <p>
+    A camera is listed here only once Lutaro's support for it has shipped and a
+    reviewed hardware report backs it up. Bodies that Sony's command tables say
+    <em>should</em> work, but that nobody has run Lutaro against yet, are not
+    listed - planned support is not current support.
+  </p>
+
+  <div class="note">
+    <strong>Two different things.</strong> <em>Connection</em> is whether Lutaro
+    can talk to the body at all, over a USB cable or over Wi-Fi.
+    <em>Features</em> are what it can do once connected. A camera can connect
+    fine and still expose only part of the Picture Profile system.
+  </div>
+
+  {cameras.length === 0 && (
+    <p class="empty">
+      No camera has cleared review yet. Check back, or
+      <a href="https://github.com/tarakanof/Lutaro-Site/issues">ask about your body</a>.
+    </p>
+  )}
+
+  <ul class="cameras" role="list" aria-label="Reviewed Sony cameras">
+    {cameras.map((camera) => (
+      <li class="camera">
+        <h2 id={camera.bodyCode.toLowerCase()}>
+          {camera.marketingName}
+          <span class="code">{camera.bodyCode}</span>
+        </h2>
+        {camera.aliases.length > 0 && (
+          <p class="aliases">Also sold as {camera.aliases.join(', ')}.</p>
+        )}
+
+        <dl>
+          {camera.platforms.map((platform) => (
+            <div class="row">
+              <dt>{platform.platform}</dt>
+              <dd>
+                <span class={`badge ${platform.tone}`}>{platform.label}</span>
+                {platform.detail && <span class="detail">{platform.detail}</span>}
+                {platform.source && <span class="detail source">Evidence: {platform.source}.</span>}
+              </dd>
+            </div>
+          ))}
+          <div class="row">
+            <dt>Picture Profiles</dt>
+            <dd>
+              <span class={`badge ${camera.pictureProfile.tone}`}>{camera.pictureProfile.label}</span>
+              {camera.pictureProfile.detail && <span class="detail">{camera.pictureProfile.detail}</span>}
+              {camera.pictureProfile.source && <span class="detail source">Evidence: {camera.pictureProfile.source}.</span>}
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Creative Look</dt>
+            <dd>
+              <span class={`badge ${camera.creativeLook.tone}`}>{camera.creativeLook.label}</span>
+              {camera.creativeLook.detail && <span class="detail">{camera.creativeLook.detail}</span>}
+              {camera.creativeLook.source && <span class="detail source">Evidence: {camera.creativeLook.source}.</span>}
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Creative Style</dt>
+            <dd>
+              <span class={`badge ${camera.creativeStyle.tone}`}>{camera.creativeStyle.label}</span>
+              {camera.creativeStyle.detail && <span class="detail">{camera.creativeStyle.detail}</span>}
+              {camera.creativeStyle.source && <span class="detail source">Evidence: {camera.creativeStyle.source}.</span>}
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Remote shutter</dt>
+            <dd>
+              <span class={`badge ${camera.remoteShutter.tone}`}>{camera.remoteShutter.label}</span>
+              {camera.remoteShutter.detail && <span class="detail">{camera.remoteShutter.detail}</span>}
+              {camera.remoteShutter.source && <span class="detail source">Evidence: {camera.remoteShutter.source}.</span>}
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Live view</dt>
+            <dd>
+              <span class={`badge ${camera.liveView.tone}`}>{camera.liveView.label}</span>
+              {camera.liveView.detail && <span class="detail">{camera.liveView.detail}</span>}
+              {camera.liveView.source && <span class="detail source">Evidence: {camera.liveView.source}.</span>}
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Reviewed</dt>
+            <dd>
+              <span class="detail">
+                {camera.evidence.firmware}. Last reviewed {camera.evidence.reviewDate}.
+              </span>
+              {camera.evidence.divergences.map((note) => (
+                <span class="detail divergence">Unresolved: {note}</span>
+              ))}
+              {camera.helpGuide && (
+                <span class="detail">
+                  <a href={camera.helpGuide}>Sony's help guide for the {camera.marketingName}</a>
+                </span>
+              )}
+            </dd>
+          </div>
+        </dl>
+      </li>
+    ))}
+  </ul>
+
+  <h2>What the verdicts mean</h2>
+  <dl class="glossary">
+    <dt>Full Picture Profile support</dt>
+    <dd>
+      Lutaro reads every setting out of a PP slot and writes a whole profile
+      back into one - gamma, colour mode, detail, knee, black level, and the
+      rest.
+    </dd>
+    <dt>Selector only</dt>
+    <dd>
+      Lutaro can choose which Picture Profile slot the camera is using, but it
+      cannot read or change the settings inside that slot. The body exposes the
+      slot switch and nothing behind it, so a profile from your library cannot
+      be written to it.
+    </dd>
+    <dt>Picture Profiles unavailable</dt>
+    <dd>The body offers no Picture Profile control over a remote connection at all.</dd>
+    <dt>Creative Look and Creative Style</dt>
+    <dd>
+      Two different Sony features, tracked separately here.
+      <strong>Creative Look</strong> is the newer system (ST, PT, FL and the
+      custom looks on recent bodies); <strong>Creative Style</strong> is the
+      older preset system it replaced. A body can have one, the other, or
+      neither, so neither verdict implies the other.
+    </dd>
+    <dt>Not reviewed</dt>
+    <dd>
+      Nobody has produced citable evidence either way. It is a third state - it
+      does not mean the feature is missing, and it does not mean it works.
+    </dd>
+  </dl>
+
+  <h2>Where these facts come from</h2>
+  <p>
+    Every row is generated from one reviewed catalog inside the Lutaro app, not
+    typed into this page. An entry is written only from Sony's own published
+    command tables or from a compatibility report a user ran on real hardware
+    and a maintainer reviewed - never from a forum post or a guess. Conflicting
+    evidence stays visible as an unresolved note rather than quietly overwriting
+    the standing claim.
+  </p>
+  <p>
+    Sony's authoritative list of bodies that speak the remote command set is the
+    <a href="https://support.d-imaging.sony.co.jp/app/sdk/en/index.html">
+      Camera Remote SDK / Camera Remote Command page</a>. A body listed there is
+    not automatically listed here: Sony's tables describe the camera, this page
+    describes what Lutaro has actually been shown to do with it.
+  </p>
+  {withheld.awaitingReview > 0 && (
+    <p>
+      {withheld.awaitingReview === 1
+        ? 'One body is under review right now and is deliberately left off the list above; it appears'
+        : `${withheld.awaitingReview} bodies are under review right now and are deliberately left off the list above; they appear`}
+      here once the app support ships and a reviewed hardware report confirms it.
+    </p>
+  )}
+  {withheld.reviewedUnsupported > 0 && (
+    <p>
+      {withheld.reviewedUnsupported === 1
+        ? 'One body has been reviewed and does not work with Lutaro, so it is not listed above.'
+        : `${withheld.reviewedUnsupported} bodies have been reviewed and do not work with Lutaro, so they are not listed above.`}
+      That is a settled answer, not a pending one.
+    </p>
+  )}
+
+  <h2>Your camera isn't listed?</h2>
+  <p>
+    That is not a "no" - most Sony bodies have simply never been reviewed. If you
+    have one, Lutaro can produce a compatibility report for it: connect the
+    camera by USB and use <em>Settings → Diagnostics → Camera compatibility</em>.
+    The report is redacted, it never leaves your device unless you share it, and
+    it is what turns a body into an entry above. Then
+    <a href="https://github.com/tarakanof/Lutaro-Site/issues">open an issue</a>.
+  </p>
+  <p>
+    Before any of that, walk the
+    <a href={`${base}/setup/`}>camera setup guide</a> - most "it doesn't connect"
+    reports are a camera setting, not a compatibility limit.
+  </p>
+
+  <style>
+    .empty { color: var(--text-secondary); }
+    .cameras { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+    .camera {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .camera h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.72em;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .aliases { margin: 0.3rem 0 0; font-size: 0.85em; color: var(--text-secondary); }
+    .camera dl { margin: 1rem 0 0; }
+    .row {
+      display: grid;
+      grid-template-columns: 11rem 1fr;
+      gap: 0.4rem 1rem;
+      padding: 0.6rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .row dt { font-weight: 600; font-size: 0.92em; }
+    .row dd { margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+    .detail { font-size: 0.88em; color: var(--text-secondary); }
+    .source { font-size: 0.82em; color: var(--text-tertiary); }
+    .divergence { color: var(--text); }
+
+    /* Each verdict carries its own word plus a leading mark, so the meaning
+       never rests on colour alone. */
+    .badge {
+      align-self: start;
+      font-size: 0.82em;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 980px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .badge::before { margin-right: 0.35rem; }
+    .badge.yes { color: #1a7f37; border-color: #1a7f3755; }
+    .badge.yes::before { content: "\2713"; }
+    .badge.partial { color: #9a6700; border-color: #9a670055; }
+    .badge.partial::before { content: "\25D0"; }
+    .badge.no { color: #b3261e; border-color: #b3261e55; }
+    .badge.no::before { content: "\2715"; }
+    .badge.unreviewed { color: var(--text-secondary); }
+    .badge.unreviewed::before { content: "\2013"; }
+    @media (prefers-color-scheme: dark) {
+      .badge.yes { color: #56d364; border-color: #56d36455; }
+      .badge.partial { color: #e3b341; border-color: #e3b34155; }
+      .badge.no { color: #ff7b72; border-color: #ff7b7255; }
+    }
+
+    .glossary dt { font-weight: 600; margin-top: 1rem; }
+    .glossary dd { margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.95em; }
+
+    @media (max-width: 34rem) {
+      .row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 0; }
+      .camera { padding: 1rem; }
+    }
+  </style>
+</Base>

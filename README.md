@@ -10,6 +10,7 @@ camera's slots over Wi-Fi or USB.
 - **App Store:** https://apps.apple.com/app/lutaro/id6799778506
 - **Camera setup guide:** https://tarakanof.github.io/Lutaro-Site/setup/
 - **Create a profile file:** https://tarakanof.github.io/Lutaro-Site/format/
+- **Camera compatibility:** https://tarakanof.github.io/Lutaro-Site/compatibility/
 - **Privacy policy:** https://tarakanof.github.io/Lutaro-Site/privacy/
 - **Support:** [open an issue](https://github.com/tarakanof/Lutaro-Site/issues)
   (bug reports, questions, and feature requests welcome)
@@ -36,3 +37,10 @@ The site is built with [Astro](https://astro.build): pages live in
 `src/pages/`, the shared layout in `src/layouts/Base.astro`. Pushing to
 `main` builds and deploys via `.github/workflows/deploy.yml`. Local dev:
 `npm install && npm run dev`.
+
+`npm run check` is the pre-merge gate: unit tests (`npm test`), `astro build`,
+then an internal-link check over `dist/`. The `/compatibility/` page is
+generated at build time from the vendored catalog export in `src/data/` - see
+[`src/data/README.md`](src/data/README.md) for what is generated and how to
+refresh it. The build fails rather than publishing a camera claim it cannot
+validate.

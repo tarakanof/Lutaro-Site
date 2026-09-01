@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -15,14 +16,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # The gate: unit tests, the Astro build (which fails on an invalid camera
+  # catalog), then the internal-link check. Runs on pull requests too, so a
+  # missing base prefix or a bad catalog is caught before it reaches main.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run check
+
   build:
+    needs: check
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Build Astro site
         uses: withastro/action@v3
+
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

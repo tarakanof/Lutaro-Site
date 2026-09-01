@@ -9,6 +9,7 @@ const nav = [
   { href: `${base}/`, label: 'Home' },
   { href: `${base}/setup/`, label: 'Setup Guide' },
   { href: `${base}/format/`, label: 'Profile Format' },
+  { href: `${base}/compatibility/`, label: 'Compatibility' },
   { href: `${base}/privacy/`, label: 'Privacy' },
   { href: 'https://github.com/tarakanof/Lutaro-Site/issues', label: 'Support' },
 ];
@@ -52,7 +53,8 @@ const current = Astro.url.pathname;
     color-scheme: light dark;
     --text: #1d1d1f;
     --text-secondary: #6e6e73;
-    --text-tertiary: #86868b;
+    /* Not #86868b: that is 3.6:1 on white, under WCAG AA for body text. */
+    --text-tertiary: #6c6c71;
     --bg: #fff;
     --surface: #f5f5f7;
     --border: #e3e3e6;

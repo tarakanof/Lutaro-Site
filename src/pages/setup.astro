@@ -1,18 +1,26 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Base
   title="Lutaro - Camera Setup Guide"
-  description="How to set up your Sony camera for Lutaro: Wi-Fi, Bluetooth connect in the field, PC Remote, Access Authentication, pairing, and USB - with exact menu paths for both menu generations."
+  description="How to set up your Sony camera for Lutaro: Wi-Fi, Bluetooth connect in the field, PC Remote, Access Authentication, pairing, and USB on iPhone, iPad, and Mac - with exact menu paths for both menu generations."
 >
   <h1>Set up your Sony camera for Lutaro</h1>
   <p class="meta">Menu paths verified against Sony's official α6700 Help Guide · July 2026</p>
 
   <p>
     Lutaro talks to your camera the same way Sony's own remote software does:
-    over Wi-Fi using the camera's <strong>PC Remote</strong> function, or (on
-    Mac) over USB. This guide walks through every camera setting the app
+    over Wi-Fi using the camera's <strong>PC Remote</strong> function, or
+    directly over a USB cable - on iPhone and iPad as well as on the Mac. Over
+    USB there is no network involved at all: the app speaks to the camera
+    through the cable. This guide walks through every camera setting the app
     needs, with the exact menu paths.
+  </p>
+  <p>
+    Which cameras have been reviewed, and what each one supports once
+    connected, is on the <a href={`${base}/compatibility/`}>compatibility
+    page</a>.
   </p>
 
   <div class="note">
@@ -198,10 +206,11 @@ import Base from '../layouts/Base.astro';
     Wi-Fi networks - you'll need step 1 again afterwards.
   </div>
 
-  <h2 id="usb">6. USB (Mac only)</h2>
+  <h2 id="usb">6. USB cable</h2>
   <p>
-    On the Mac, Lutaro can also connect over a USB cable. Set the camera's
-    USB mode to remote control:
+    Lutaro can connect over a USB cable instead of Wi-Fi, on iPhone and iPad as
+    well as on the Mac. No network, no pairing, no password - just the cable.
+    Set the camera's USB mode to remote control:
   </p>
   <span class="path">MENU → Setup → USB → USB Connection Mode → PC Remote</span>
   <p>
@@ -209,6 +218,13 @@ import Base from '../layouts/Base.astro';
     asks on every cable connect - choose
     <strong>Remote Shoot (PC Remote)</strong>.
   </p>
+  <div class="note">
+    Use a <strong>data</strong> cable, not a charge-only one, and on iPhone or
+    iPad a USB-C port or a USB-C camera adapter. Steps 1, 4 and 5 (Wi-Fi,
+    Access Authen., pairing) don't apply over a cable. Which cameras have been
+    reviewed over USB is on the
+    <a href={`${base}/compatibility/`}>compatibility page</a>.
+  </div>
 
   <h2 id="troubleshooting">7. Troubleshooting</h2>
   <ul>
@@ -220,9 +236,10 @@ import Base from '../layouts/Base.astro';
     <li>
       <strong>Scan finds nothing away from home</strong> - with no local
       network, Lutaro shows a "No Local Network" screen and still checks any
-      recently-connected camera. To connect, use one of the three options
-      above: <a href="#away-from-home">camera-as-access-point, Personal
-      Hotspot, or manual IP entry</a>.
+      recently-connected camera. The simplest fix is a
+      <a href="#usb">USB cable</a>, which needs no network at all. Otherwise
+      use one of the four <a href="#away-from-home">away-from-home options</a>:
+      Bluetooth, camera-as-access-point, Personal Hotspot, or manual IP entry.
     </li>
     <li>
       <strong>"Camera is busy"</strong> - another app holds the connection.

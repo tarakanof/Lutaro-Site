@@ -1,0 +1,53 @@
+{
+  "entries": [
+    {
+      "aliases": [
+        "DSC-RX100M7A"
+      ],
+      "bodyCode": "DSC-RX100M7",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "RX100 VII",
+      "reviewDate": "2026-09-01",
+      "sourceIssue": 1484,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-6700",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "both",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "reviewedHardwareReport",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "both",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b16700",
+      "reviewDate": "2026-09-01",
+      "sourceIssue": 1484,
+      "unresolvedDivergences": []
+    }
+  ],
+  "schemaVersion": 1
+}
