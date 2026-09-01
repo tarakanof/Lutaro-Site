@@ -92,10 +92,9 @@ test('a reviewed but unsupported carrier does not publish an entry', () => {
   assert.equal(decision.published, false);
   // Settled "does not work", not "not looked at yet" - the page words them apart.
   assert.equal(decision.status, 'reviewedUnsupported');
-  assert.deepEqual(catalogView(wrap(entry)).withheld, {
-    awaitingReview: 0,
-    reviewedUnsupported: 1,
-  });
+  const view = catalogView(wrap(entry));
+  assert.equal(view.withheld, 1);
+  assert.equal(view.documented.length, 0, 'a settled "no" is not a pending review');
 });
 
 test('a documentation-only carrier never earns a supported route badge', () => {
@@ -143,13 +142,43 @@ test('duplicate body codes are refused - the page derives heading ids from them'
   assert.throws(() => loadCatalog(wrap(first, second)), CatalogError);
 });
 
-test('the RX100 VII stays unpublished while its support is documentation only', () => {
+test('the RX100 VII stays out of the verified list while its support is documented only', () => {
   const view = catalogView(ARTIFACT);
   assert.ok(
     !view.cameras.some((camera) => camera.bodyCode === 'DSC-RX100M7'),
-    'RX100 VII must not appear until a reviewed hardware report lands',
+    'RX100 VII must not appear as verified until a reviewed hardware report lands',
   );
-  assert.deepEqual(view.withheld, { awaitingReview: 1, reviewedUnsupported: 0 });
+  const rx100 = view.documented.find((camera) => camera.bodyCode === 'DSC-RX100M7');
+  assert.ok(rx100, 'it belongs in the Sony-documented list instead');
+  assert.deepEqual(rx100.documented, ['USB cable']);
+  assert.equal(rx100.pictureProfile, 'Selector only');
+  assert.equal(view.withheld, 0);
+});
+
+test('a documented entry carries no platform rows or supported badges', () => {
+  // The shape itself is the guard: nothing in it can render as a Lutaro verdict.
+  const entry = reviewedEntry();
+  entry.claims.usbPTP.provenance = 'sonyDocumentation';
+  entry.claims.pictureProfile.provenance = 'sonyDocumentation';
+  const [camera] = catalogView(wrap(entry)).documented;
+  assert.equal(camera.platforms, undefined);
+  assert.equal(camera.remoteShutter, undefined);
+  assert.deepEqual(camera.documented, ['USB cable']);
+});
+
+test('a documented entry states only the carriers Sony actually covers', () => {
+  const entry = reviewedEntry();
+  entry.claims.usbPTP = { value: 'supported', provenance: 'sonyDocumentation' };
+  entry.claims.ptpIP = { value: 'unsupported', provenance: 'sonyDocumentation' };
+  const [camera] = catalogView(wrap(entry)).documented;
+  assert.deepEqual(camera.documented, ['USB cable']);
+  assert.deepEqual(camera.excluded, ['Wi-Fi']);
+
+  // An ABSENT claim stays absent - never rendered as a documented exclusion.
+  const silent = reviewedEntry();
+  silent.claims.usbPTP.provenance = 'sonyDocumentation';
+  const [quiet] = catalogView(wrap(silent)).documented;
+  assert.deepEqual(quiet.excluded, []);
 });
 
 test('the a6700 publishes with both platforms and full Picture Profile support', () => {

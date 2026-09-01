@@ -5,25 +5,25 @@ import artifact from '../data/camera-support-catalog.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // Throws on an unknown schema or a missing display field, which fails the build.
-const { cameras, withheld } = catalogView(artifact);
+const { cameras, documented, withheld } = catalogView(artifact);
 ---
 <Base
   title="Lutaro - Sony camera compatibility"
-  description="Which Sony cameras Lutaro connects to, over USB or Wi-Fi, and at what Picture Profile level. Reviewed evidence only, with the Sony model code and review date for every entry. Lutaro is an independent app and is not affiliated with Sony."
+  description="Which Sony cameras Lutaro connects to, over USB or Wi-Fi, and at what Picture Profile level: the bodies verified on real hardware, kept separate from the bodies Sony's command tables list but nobody has confirmed. Lutaro is an independent app and is not affiliated with Sony."
 >
   <h1>Sony camera compatibility</h1>
   <p class="meta">
-    Reviewed evidence only. Last review in this list:
-    {cameras.length > 0
+    Last review: {cameras.length > 0
       ? cameras.map((camera) => camera.evidence.reviewDate).sort().at(-1)
       : 'none yet'}.
   </p>
 
   <p>
-    A camera is listed here only once Lutaro's support for it has shipped and a
-    reviewed hardware report backs it up. Bodies that Sony's command tables say
-    <em>should</em> work, but that nobody has run Lutaro against yet, are not
-    listed - planned support is not current support.
+    Two lists, and the difference matters.
+    <a href="#reviewed">Verified by Lutaro</a> is what has actually been run
+    against the hardware. <a href="#documented">Listed by Sony</a> is what
+    Sony's own command tables cover - those bodies are likely to work, but
+    nobody has confirmed it, so nothing there is a promise.
   </p>
 
   <div class="note">
@@ -32,6 +32,12 @@ const { cameras, withheld } = catalogView(artifact);
     <em>Features</em> are what it can do once connected. A camera can connect
     fine and still expose only part of the Picture Profile system.
   </div>
+
+  <h2 id="reviewed">Verified by Lutaro</h2>
+  <p>
+    Run against the real camera, with the result reviewed. Everything below is
+    something Lutaro has been shown to do.
+  </p>
 
   {cameras.length === 0 && (
     <p class="empty">
@@ -123,6 +129,44 @@ const { cameras, withheld } = catalogView(artifact);
     ))}
   </ul>
 
+  <h2 id="documented">Listed by Sony, not verified by Lutaro</h2>
+  <p>
+    Sony's own Camera Remote Command tables cover these bodies, so the protocol
+    Lutaro speaks should reach them - but nobody has run Lutaro against one and
+    reviewed the result. Treat every line as <em>Sony's</em> claim about the
+    camera, not Lutaro's claim about the app. A body moves up to
+    <a href="#reviewed">Verified</a> once someone runs the compatibility check
+    on it.
+  </p>
+
+  {documented.length === 0 ? (
+    <p class="empty">Nothing here right now - every catalogued body has been reviewed.</p>
+  ) : (
+    <ul class="documented" role="list" aria-label="Cameras Sony lists as compatible">
+      {documented.map((camera) => (
+        <li>
+          <span class="name">{camera.marketingName}</span>
+          <span class="code">{camera.bodyCode}</span>
+          <span class="detail">
+            {camera.documented.length > 0
+              ? `Sony documents: ${camera.documented.join(', ')}.`
+              : 'Sony documents no connection route.'}
+            {camera.excluded.length > 0 && ` Not covered: ${camera.excluded.join(', ')}.`}
+            {camera.pictureProfile && ` Picture Profiles: ${camera.pictureProfile.toLowerCase()}.`}
+          </span>
+          {camera.aliases.length > 0 && (
+            <span class="detail">Also sold as {camera.aliases.join(', ')}.</span>
+          )}
+          {camera.helpGuide && (
+            <span class="detail">
+              <a href={camera.helpGuide}>Sony's help guide for the {camera.marketingName}</a>
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
+
   <h2>What the verdicts mean</h2>
   <dl class="glossary">
     <dt>Full Picture Profile support</dt>
@@ -171,19 +215,11 @@ const { cameras, withheld } = catalogView(artifact);
     not automatically listed here: Sony's tables describe the camera, this page
     describes what Lutaro has actually been shown to do with it.
   </p>
-  {withheld.awaitingReview > 0 && (
+  {withheld > 0 && (
     <p>
-      {withheld.awaitingReview === 1
-        ? 'One body is under review right now and is deliberately left off the list above; it appears'
-        : `${withheld.awaitingReview} bodies are under review right now and are deliberately left off the list above; they appear`}
-      here once the app support ships and a reviewed hardware report confirms it.
-    </p>
-  )}
-  {withheld.reviewedUnsupported > 0 && (
-    <p>
-      {withheld.reviewedUnsupported === 1
-        ? 'One body has been reviewed and does not work with Lutaro, so it is not listed above.'
-        : `${withheld.reviewedUnsupported} bodies have been reviewed and do not work with Lutaro, so they are not listed above.`}
+      {withheld === 1
+        ? 'One body has been reviewed and does not work with Lutaro, so it appears in neither list.'
+        : `${withheld} bodies have been reviewed and do not work with Lutaro, so they appear in neither list.`}
       That is a settled answer, not a pending one.
     </p>
   )}
@@ -267,6 +303,20 @@ const { cameras, withheld } = catalogView(artifact);
       .badge.partial { color: #e3b341; border-color: #e3b34155; }
       .badge.no { color: #ff7b72; border-color: #ff7b7255; }
     }
+
+    .documented { list-style: none; padding: 0; margin: 1.2rem 0 0; }
+    .documented li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.15rem 0.6rem;
+      padding: 0.7rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .documented li > * { flex-basis: 100%; }
+    .documented .name,
+    .documented .code { flex-basis: auto; }
+    .documented .name { font-weight: 600; }
 
     .glossary dt { font-weight: 600; margin-top: 1rem; }
     .glossary dd { margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.95em; }

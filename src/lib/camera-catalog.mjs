@@ -287,20 +287,61 @@ function entryView(entry) {
   };
 }
 
+/** Carrier names as a reader knows them. */
+const CARRIER_NAMES = { usbPTP: 'USB cable', ptpIP: 'Wi-Fi' };
+
 /**
- * The page's whole data set: validated, gated, and sorted by marketing name.
- * `withheld` is a count only - naming a body Lutaro does not yet support would
- * itself read as a support claim.
+ * A body Sony's tables cover but Lutaro has never been run against.
+ *
+ * Deliberately a different shape from `entryView`: no platform rows and no
+ * green verdicts, because Sony documenting a carrier says nothing about
+ * whether Lutaro reaches the body over it. Only what Sony's tables actually
+ * state is rendered - an absent claim stays absent rather than becoming a
+ * "no", which is the catalog's own third-state rule.
+ */
+function documentedView(entry) {
+  const documented = CARRIERS.filter((c) => entry.claims[c]?.value === 'supported').map(
+    (c) => CARRIER_NAMES[c],
+  );
+  const excluded = CARRIERS.filter((c) => entry.claims[c]?.value === 'unsupported').map(
+    (c) => CARRIER_NAMES[c],
+  );
+  const pp = entry.claims.pictureProfile;
+  return {
+    bodyCode: entry.bodyCode,
+    marketingName: entry.marketingName,
+    aliases: entry.aliases ?? [],
+    documented,
+    excluded,
+    pictureProfile: pp ? PICTURE_PROFILE_LABELS[pp.value].label : '',
+    helpGuide: HELP_GUIDES[entry.bodyCode] ?? null,
+  };
+}
+
+/**
+ * The page's whole data set, in three parts:
+ *
+ *  - `cameras`      published: reviewed on hardware, support shipped.
+ *  - `documented`   Sony's tables cover the body; Lutaro has not verified it.
+ *  - `withheld`     a count of bodies reviewed and found not to work.
+ *
+ * The first two are rendered in separate, separately-labelled sections. They
+ * are never merged: a reader skimming one list must not pick up a claim that
+ * only holds in the other.
  */
 export function catalogView(raw) {
   const catalog = loadCatalog(raw);
-  const published = [];
-  const withheld = { awaitingReview: 0, reviewedUnsupported: 0 };
+  const cameras = [];
+  const documented = [];
+  let withheld = 0;
   for (const entry of catalog.entries) {
     const decision = publicationDecision(entry);
-    if (decision.published) published.push(entryView(entry));
-    else withheld[decision.status] += 1;
+    if (decision.published) cameras.push(entryView(entry));
+    else if (decision.status === 'awaitingReview') documented.push(documentedView(entry));
+    else withheld += 1;
   }
-  published.sort((a, b) => a.marketingName.localeCompare(b.marketingName, 'en'));
-  return { cameras: published, withheld };
+  const byName = (a, b) => a.marketingName.localeCompare(b.marketingName, 'en');
+  cameras.sort(byName);
+  documented.sort(byName);
+  return { cameras, documented, withheld };
 }
