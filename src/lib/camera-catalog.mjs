@@ -300,19 +300,27 @@ const CARRIER_NAMES = { usbPTP: 'USB cable', ptpIP: 'Wi-Fi' };
  * "no", which is the catalog's own third-state rule.
  */
 function documentedView(entry) {
-  const documented = CARRIERS.filter((c) => entry.claims[c]?.value === 'supported').map(
-    (c) => CARRIER_NAMES[c],
-  );
-  const excluded = CARRIERS.filter((c) => entry.claims[c]?.value === 'unsupported').map(
-    (c) => CARRIER_NAMES[c],
-  );
+  // Three states per carrier, never two: Sony documents it, Sony's table leaves
+  // it uncovered, or the catalog carries no claim at all. Collapsing the last
+  // two would turn "nobody said" into "no".
+  const carrierMarks = {};
+  for (const carrier of CARRIERS) {
+    const claim = entry.claims[carrier];
+    carrierMarks[CARRIER_NAMES[carrier]] = !claim
+      ? 'unstated'
+      : claim.value === 'supported'
+        ? 'yes'
+        : 'no';
+  }
   const pp = entry.claims.pictureProfile;
   return {
     bodyCode: entry.bodyCode,
     marketingName: entry.marketingName,
     aliases: entry.aliases ?? [],
-    documented,
-    excluded,
+    carrierMarks,
+    documented: CARRIERS.filter((c) => entry.claims[c]?.value === 'supported').map(
+      (c) => CARRIER_NAMES[c],
+    ),
     pictureProfile: pp ? PICTURE_PROFILE_LABELS[pp.value].label : '',
     helpGuide: HELP_GUIDES[entry.bodyCode] ?? null,
   };

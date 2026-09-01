@@ -150,7 +150,7 @@ test('the RX100 VII stays out of the verified list while its support is document
   );
   const rx100 = view.documented.find((camera) => camera.bodyCode === 'DSC-RX100M7');
   assert.ok(rx100, 'it belongs in the Sony-documented list instead');
-  assert.deepEqual(rx100.documented, ['USB cable']);
+  assert.deepEqual(rx100.carrierMarks, { 'USB cable': 'yes', 'Wi-Fi': 'unstated' });
   assert.equal(rx100.pictureProfile, 'Selector only');
   assert.equal(view.withheld, 0);
 });
@@ -166,19 +166,18 @@ test('a documented entry carries no platform rows or supported badges', () => {
   assert.deepEqual(camera.documented, ['USB cable']);
 });
 
-test('a documented entry states only the carriers Sony actually covers', () => {
+test('each carrier gets one of three marks, never two', () => {
   const entry = reviewedEntry();
   entry.claims.usbPTP = { value: 'supported', provenance: 'sonyDocumentation' };
   entry.claims.ptpIP = { value: 'unsupported', provenance: 'sonyDocumentation' };
   const [camera] = catalogView(wrap(entry)).documented;
-  assert.deepEqual(camera.documented, ['USB cable']);
-  assert.deepEqual(camera.excluded, ['Wi-Fi']);
+  assert.deepEqual(camera.carrierMarks, { 'USB cable': 'yes', 'Wi-Fi': 'no' });
 
-  // An ABSENT claim stays absent - never rendered as a documented exclusion.
+  // An ABSENT claim is "not stated" - never collapsed into "not covered".
   const silent = reviewedEntry();
   silent.claims.usbPTP.provenance = 'sonyDocumentation';
   const [quiet] = catalogView(wrap(silent)).documented;
-  assert.deepEqual(quiet.excluded, []);
+  assert.deepEqual(quiet.carrierMarks, { 'USB cable': 'yes', 'Wi-Fi': 'unstated' });
 });
 
 test('the a6700 publishes with both platforms and full Picture Profile support', () => {

@@ -6,6 +6,16 @@ import artifact from '../data/camera-support-catalog.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // Throws on an unknown schema or a missing display field, which fails the build.
 const { cameras, documented, withheld } = catalogView(artifact);
+
+// Meaning never rests on the glyph alone - each cell also carries a word for
+// screen readers, and "documented" / "not covered" / "not stated" are three
+// different things.
+const CARRIER_GLYPH = { yes: '\u2713', no: '\u2715', unstated: '\u2013' };
+const CARRIER_WORD = {
+  yes: 'Documented by Sony',
+  no: 'Not covered by Sony',
+  unstated: 'Not stated',
+};
 ---
 <Base
   title="Lutaro - Sony camera compatibility"
@@ -142,30 +152,53 @@ const { cameras, documented, withheld } = catalogView(artifact);
   {documented.length === 0 ? (
     <p class="empty">Nothing here right now - every catalogued body has been reviewed.</p>
   ) : (
-    <ul class="documented" role="list" aria-label="Cameras Sony lists as compatible">
-      {documented.map((camera) => (
-        <li>
-          <span class="name">{camera.marketingName}</span>
-          <span class="code">{camera.bodyCode}</span>
-          <span class="detail">
-            {camera.documented.length > 0
-              ? `Sony documents: ${camera.documented.join(', ')}.`
-              : 'Sony documents no connection route.'}
-            {camera.excluded.length > 0 && ` Not covered: ${camera.excluded.join(', ')}.`}
-            {camera.pictureProfile && ` Picture Profiles: ${camera.pictureProfile.toLowerCase()}.`}
-          </span>
-          {camera.aliases.length > 0 && (
-            <span class="detail">Also sold as {camera.aliases.join(', ')}.</span>
-          )}
-          {camera.helpGuide && (
-            <span class="detail">
-              <a href={camera.helpGuide}>Sony's help guide for the {camera.marketingName}</a>
-            </span>
-          )}
-        </li>
-      ))}
-    </ul>
+    <div class="scroller" role="region" tabindex="0" aria-labelledby="documented">
+      <table class="listed">
+        <caption class="sr-only">
+          Cameras Sony's Camera Remote Command tables cover, with the connection
+          routes and Picture Profile level Sony documents for each. Not verified
+          by Lutaro.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Camera</th>
+            <th scope="col">USB</th>
+            <th scope="col">Wi-Fi</th>
+            <th scope="col">Picture&nbsp;Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          {documented.map((camera) => (
+            <tr>
+              <th scope="row">
+                <span class="name">{camera.marketingName}</span>
+                {camera.marketingName !== camera.bodyCode && (
+                  <span class="code">{camera.bodyCode}</span>
+                )}
+                {camera.aliases.length > 0 && (
+                  <span class="code">/ {camera.aliases.join(', ')}</span>
+                )}
+              </th>
+              {['USB cable', 'Wi-Fi'].map((carrier) => (
+                <td class={`mark ${camera.carrierMarks[carrier]}`}>
+                  <span aria-hidden="true">{CARRIER_GLYPH[camera.carrierMarks[carrier]]}</span>
+                  <span class="sr-only">{CARRIER_WORD[camera.carrierMarks[carrier]]}</span>
+                </td>
+              ))}
+              <td class="pp">{camera.pictureProfile || 'Not stated'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )}
+
+  <p class="meta">
+    Every value above is what Sony's tables state, not a Lutaro test result.
+    Sony documents which interfaces carry the command set per body; which
+    <em>kind</em> of IP connection that is (home Wi-Fi, the camera's own
+    hotspot, wired LAN) is in each model's own Sony help guide.
+  </p>
 
   <h2>What the verdicts mean</h2>
   <dl class="glossary">
@@ -304,19 +337,54 @@ const { cameras, documented, withheld } = catalogView(artifact);
       .badge.no { color: #ff7b72; border-color: #ff7b7255; }
     }
 
-    .documented { list-style: none; padding: 0; margin: 1.2rem 0 0; }
-    .documented li {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.15rem 0.6rem;
-      padding: 0.7rem 0;
-      border-top: 1px solid var(--border);
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
-    .documented li > * { flex-basis: 100%; }
-    .documented .name,
-    .documented .code { flex-basis: auto; }
-    .documented .name { font-weight: 600; }
+    /* The table scrolls inside its own box so the PAGE never scrolls sideways;
+       the region is focusable so it is reachable by keyboard. */
+    .scroller {
+      overflow-x: auto;
+      margin: 1.2rem 0 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .scroller:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+    .listed { margin: 0; border-collapse: collapse; width: 100%; font-size: 0.88em; }
+    .listed th, .listed td { border: 0; border-bottom: 1px solid var(--border); }
+    .listed tbody tr:last-child th,
+    .listed tbody tr:last-child td { border-bottom: 0; }
+    .listed thead th {
+      background: var(--surface);
+      font-size: 0.86em;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .listed th, .listed td { padding: 0.5rem 0.7rem; }
+    /* Model codes must not break mid-token; the scroller absorbs the width. */
+    .listed tbody th { font-weight: 600; text-align: left; white-space: nowrap; }
+    .listed .name { display: block; }
+    .listed .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.82em;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .listed .mark { text-align: center; font-weight: 600; width: 1%; white-space: nowrap; }
+    .listed .mark.yes { color: #1a7f37; }
+    .listed .mark.no { color: #b3261e; }
+    .listed .mark.unstated { color: var(--text-tertiary); }
+    .listed .pp { color: var(--text-secondary); white-space: nowrap; }
+    @media (prefers-color-scheme: dark) {
+      .listed .mark.yes { color: #56d364; }
+      .listed .mark.no { color: #ff7b72; }
+    }
 
     .glossary dt { font-weight: 600; margin-top: 1rem; }
     .glossary dd { margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.95em; }
