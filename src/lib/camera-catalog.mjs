@@ -377,6 +377,34 @@ function documentedView(entry) {
 }
 
 /**
+ * Sony's published list, minus the bodies the reviewed catalog already covers.
+ *
+ * This is a transcription of Sony's own table (see
+ * `scripts/extract-sony-models.py`), never a Lutaro judgement - so the catalog
+ * always wins where the two overlap, whichever section it put the body in.
+ */
+export function sonyOnlyModels(sonyArtifact, catalogView) {
+  const known = new Set(
+    [...catalogView.cameras, ...catalogView.documented].map((c) => c.bodyCode.toUpperCase()),
+  );
+  return sonyArtifact.models
+    .filter((model) => !known.has(model.bodyCode.toUpperCase()))
+    .map((model) => ({
+      bodyCode: model.bodyCode,
+      marketingName: model.marketingName,
+      aliases: model.aliases ?? [],
+      carrierMarks: {
+        'USB cable': model.usb ? 'yes' : 'no',
+        'Wi-Fi': model.ip ? 'yes' : 'no',
+      },
+      bluetooth: 'unstated',
+      pictureProfile: '',
+      creativeLook: '',
+      helpGuide: HELP_GUIDES[model.bodyCode] ?? null,
+    }));
+}
+
+/**
  * The page's whole data set, in three parts:
  *
  *  - `cameras`      published: reviewed on hardware, support shipped.

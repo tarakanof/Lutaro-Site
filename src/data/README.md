@@ -23,6 +23,25 @@ validates this artifact at build time and refuses an unknown schema version, an
 unknown vocabulary value or a missing required display field; the build fails
 rather than serving a guess.
 
+## `sony-ptp3-models.json`
+
+Sony's own published camera list, extracted from `README.pdf` in the Camera
+Remote Command 2.02.00 package (its "Protocol Compatibility" table plus the
+per-model USB/IP interface table). Regenerate with:
+
+```sh
+scripts/extract-sony-models.py --pdf ~/Downloads/CameraRemoteCommand-2.02.00/README.pdf
+```
+
+Needs `pdftotext` (poppler). The PDF is Sony's copyright and is deliberately
+not vendored; the generated JSON is, so the site builds without it. Marketing
+names are DERIVED from the model codes by Sony's naming conventions inside the
+script, not hand-typed, so a new body in a future package gets a name for free.
+
+This is a transcription of Sony's document - what Sony published, never what
+Lutaro can do. Where a body also appears in the reviewed catalog above, the
+catalog wins and the body renders as tested.
+
 ## `profile-keys.json`
 
 The `/format/` page's key/enum/range data, transcribed from the app's

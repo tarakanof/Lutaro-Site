@@ -1,0 +1,293 @@
+{
+  "source": "Sony Camera Control PTP Reference, README.pdf - 'Protocol Compatibility' and the per-model USB/IP interface table",
+  "package": "CameraRemoteCommand-2.02.00",
+  "ipNote": "Sony defers which kind of IP connection each body supports to that model's own help guide.",
+  "models": [
+    {
+      "bodyCode": "BRC-AM7",
+      "marketingName": "BRC-AM7",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "DSC-RX0M2",
+      "marketingName": "RX0 II",
+      "aliases": [],
+      "usb": true,
+      "ip": false,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "DSC-RX100M7",
+      "marketingName": "RX100 VII",
+      "aliases": [
+        "DSC-RX100M7A"
+      ],
+      "usb": true,
+      "ip": false,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "DSC-RX1RM3",
+      "marketingName": "RX1R III",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "HXR-NX800",
+      "marketingName": "HXR-NX800",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": true
+    },
+    {
+      "bodyCode": "ILCE-1",
+      "marketingName": "α1",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-1M2",
+      "marketingName": "α1 II",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-6700",
+      "marketingName": "α6700",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7C",
+      "marketingName": "α7C",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7CM2",
+      "marketingName": "α7C II",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7CR",
+      "marketingName": "α7CR",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7M4",
+      "marketingName": "α7 IV",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7M5",
+      "marketingName": "α7 V",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7RM4",
+      "marketingName": "α7R IV",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7RM4A",
+      "marketingName": "α7R IVA",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7RM5",
+      "marketingName": "α7R V",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7RM6",
+      "marketingName": "α7R VI",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-7SM3",
+      "marketingName": "α7S III",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-9M2",
+      "marketingName": "α9 II",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILCE-9M3",
+      "marketingName": "α9 III",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILME-FR7",
+      "marketingName": "FR7",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILME-FX2",
+      "marketingName": "FX2",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILME-FX3",
+      "marketingName": "FX3",
+      "aliases": [
+        "ILME-FX3A"
+      ],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILME-FX30",
+      "marketingName": "FX30",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ILME-FX6",
+      "marketingName": "FX6",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": true
+    },
+    {
+      "bodyCode": "ILX-LR1",
+      "marketingName": "ILX-LR1",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "MPC-2610",
+      "marketingName": "BURANO",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": true
+    },
+    {
+      "bodyCode": "PXW-Z200",
+      "marketingName": "PXW-Z200",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": true
+    },
+    {
+      "bodyCode": "PXW-Z300",
+      "marketingName": "PXW-Z300",
+      "aliases": [],
+      "usb": false,
+      "ip": true,
+      "noLiveView": true
+    },
+    {
+      "bodyCode": "ZV-1",
+      "marketingName": "ZV-1",
+      "aliases": [
+        "ZV-1A"
+      ],
+      "usb": true,
+      "ip": false,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ZV-1F",
+      "marketingName": "ZV-1F",
+      "aliases": [],
+      "usb": true,
+      "ip": false,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ZV-1M2",
+      "marketingName": "ZV-1 II",
+      "aliases": [],
+      "usb": true,
+      "ip": false,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ZV-E1",
+      "marketingName": "ZV-E1",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ZV-E10",
+      "marketingName": "ZV-E10",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    },
+    {
+      "bodyCode": "ZV-E10M2",
+      "marketingName": "ZV-E10 II",
+      "aliases": [],
+      "usb": true,
+      "ip": true,
+      "noLiveView": false
+    }
+  ]
+}

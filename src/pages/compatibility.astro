@@ -1,380 +1,137 @@
 ---
 import Base from '../layouts/Base.astro';
-import { catalogView } from '../lib/camera-catalog.mjs';
+import { catalogView, sonyOnlyModels } from '../lib/camera-catalog.mjs';
 import artifact from '../data/camera-support-catalog.json';
+import sony from '../data/sony-ptp3-models.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // Throws on an unknown schema or a missing display field, which fails the build.
-const { cameras, documented, withheld } = catalogView(artifact);
+const view = catalogView(artifact);
+// Sony's published list, minus anything the reviewed catalog already covers.
+const listed = [...view.documented, ...sonyOnlyModels(sony, view)].sort((a, b) =>
+  a.marketingName.localeCompare(b.marketingName, 'en'),
+);
 
-// Meaning never rests on the glyph alone - each cell also carries a word for
-// screen readers, and "documented" / "not covered" / "not stated" are three
-// different things.
-const CARRIER_GLYPH = { yes: '\u2713', no: '\u2715', unstated: '\u2013' };
-const CARRIER_WORD = {
-  yes: 'Documented by Sony',
-  no: 'Not covered by Sony',
-  unstated: 'Not stated',
-};
+// The glyph never carries the meaning alone - every cell also holds a word for
+// screen readers.
+const GLYPH = { yes: '✓', no: '✕', unstated: '–' };
+const WORD = { yes: 'Yes', no: 'No', unstated: 'Not known' };
+const routes = (camera) => camera.platforms[0].label.split(' or ');
 ---
 <Base
   title="Lutaro - Sony camera compatibility"
-  description="Which Sony cameras Lutaro connects to, over USB or Wi-Fi, and at what Picture Profile level: the bodies verified on real hardware, kept separate from the bodies Sony's command tables list but nobody has confirmed. Lutaro is an independent app and is not affiliated with Sony."
+  description="Which Sony cameras work with Lutaro, over USB or Wi-Fi, and at what Picture Profile level. Lutaro is an independent app and is not affiliated with Sony."
 >
-  <h1>Sony camera compatibility</h1>
-  <p class="meta">
-    Last review: {cameras.length > 0
-      ? cameras.map((camera) => camera.evidence.reviewDate).sort().at(-1)
-      : 'none yet'}.
-  </p>
+  <h1>Which Sony cameras work</h1>
 
   <p>
-    Two lists, and the difference matters.
-    <a href="#reviewed">Verified by Lutaro</a> is what has actually been run
-    against the hardware. <a href="#documented">Listed by Sony</a> is what
-    Sony's own command tables cover - those bodies are likely to work, but
-    nobody has confirmed it, so nothing there is a promise.
+    Lutaro talks to a camera the same way Sony's own software does. Sony
+    publishes which of its bodies speak that protocol and over which connection
+    - that is the list below.
   </p>
-
-  <div class="note">
-    <strong>Two different things.</strong> <em>Connection</em> is whether Lutaro
-    can talk to the body at all, over a USB cable or over Wi-Fi.
-    <em>Features</em> are what it can do once connected. A camera can connect
-    fine and still expose only part of the Picture Profile system.
-    <br /><br />
-    <strong>Bluetooth is neither.</strong> Lutaro never carries camera commands
-    over Bluetooth - it uses BLE to ask the camera to start its own Wi-Fi
-    hotspot, and to wake a sleeping body, then does the real work over Wi-Fi.
-    It is how you get connected away from a router, not a connection route of
-    its own. Setting it up is in the
-    <a href={`${base}/setup/#bluetooth`}>setup guide</a>.
-  </div>
-
-  <h2 id="reviewed">Verified by Lutaro</h2>
   <p>
-    Run against the real camera, with the result reviewed. Everything below is
-    something Lutaro has been shown to do.
+    <strong>Tested</strong> means someone has run Lutaro on that camera. The
+    rest is Sony's word, not ours: very likely to work, not promised.
   </p>
 
-  {cameras.length === 0 && (
-    <p class="empty">
-      No camera has cleared review yet. Check back, or
-      <a href="https://github.com/tarakanof/Lutaro-Site/issues">ask about your body</a>.
-    </p>
-  )}
-
-  <ul class="cameras" role="list" aria-label="Reviewed Sony cameras">
-    {cameras.map((camera) => (
-      <li class="camera">
-        <h2 id={camera.bodyCode.toLowerCase()}>
-          {camera.marketingName}
-          <span class="code">{camera.bodyCode}</span>
-        </h2>
-        {camera.aliases.length > 0 && (
-          <p class="aliases">Also sold as {camera.aliases.join(', ')}.</p>
-        )}
-
-        <dl>
-          {camera.platforms.map((platform) => (
-            <div class="row">
-              <dt>{platform.platform}</dt>
-              <dd>
-                <span class={`badge ${platform.tone}`}>{platform.label}</span>
-                {platform.detail && <span class="detail">{platform.detail}</span>}
-                {platform.source && <span class="detail source">Evidence: {platform.source}.</span>}
-              </dd>
-            </div>
-          ))}
-          <div class="row">
-            <dt>Bluetooth setup</dt>
-            <dd>
-              <span class={`badge ${camera.bluetooth.tone}`}>{camera.bluetooth.label}</span>
-              {camera.bluetooth.detail && <span class="detail">{camera.bluetooth.detail}</span>}
-              {camera.bluetooth.source && <span class="detail source">Evidence: {camera.bluetooth.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Picture Profiles</dt>
-            <dd>
-              <span class={`badge ${camera.pictureProfile.tone}`}>{camera.pictureProfile.label}</span>
-              {camera.pictureProfile.detail && <span class="detail">{camera.pictureProfile.detail}</span>}
-              {camera.pictureProfile.source && <span class="detail source">Evidence: {camera.pictureProfile.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Creative Look</dt>
-            <dd>
-              <span class={`badge ${camera.creativeLook.tone}`}>{camera.creativeLook.label}</span>
-              {camera.creativeLook.detail && <span class="detail">{camera.creativeLook.detail}</span>}
-              {camera.creativeLook.source && <span class="detail source">Evidence: {camera.creativeLook.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Creative Style</dt>
-            <dd>
-              <span class={`badge ${camera.creativeStyle.tone}`}>{camera.creativeStyle.label}</span>
-              {camera.creativeStyle.detail && <span class="detail">{camera.creativeStyle.detail}</span>}
-              {camera.creativeStyle.source && <span class="detail source">Evidence: {camera.creativeStyle.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Remote shutter</dt>
-            <dd>
-              <span class={`badge ${camera.remoteShutter.tone}`}>{camera.remoteShutter.label}</span>
-              {camera.remoteShutter.detail && <span class="detail">{camera.remoteShutter.detail}</span>}
-              {camera.remoteShutter.source && <span class="detail source">Evidence: {camera.remoteShutter.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Live view</dt>
-            <dd>
-              <span class={`badge ${camera.liveView.tone}`}>{camera.liveView.label}</span>
-              {camera.liveView.detail && <span class="detail">{camera.liveView.detail}</span>}
-              {camera.liveView.source && <span class="detail source">Evidence: {camera.liveView.source}.</span>}
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Reviewed</dt>
-            <dd>
-              <span class="detail">
-                {camera.evidence.firmware}. Last reviewed {camera.evidence.reviewDate}.
-              </span>
-              {camera.evidence.divergences.map((note) => (
-                <span class="detail divergence">Unresolved: {note}</span>
-              ))}
-              {camera.helpGuide && (
-                <span class="detail">
-                  <a href={camera.helpGuide}>Sony's help guide for the {camera.marketingName}</a>
-                </span>
-              )}
-            </dd>
-          </div>
-        </dl>
-      </li>
-    ))}
-  </ul>
-
-  <h2 id="documented">Listed by Sony, not verified by Lutaro</h2>
-  <p>
-    Sony's own Camera Remote Command tables cover these bodies, so the protocol
-    Lutaro speaks should reach them - but nobody has run Lutaro against one and
-    reviewed the result. Treat every line as <em>Sony's</em> claim about the
-    camera, not Lutaro's claim about the app. A body moves up to
-    <a href="#reviewed">Verified</a> once someone runs the compatibility check
-    on it.
-  </p>
-
-  {documented.length === 0 ? (
-    <p class="empty">Nothing here right now - every catalogued body has been reviewed.</p>
-  ) : (
-    <div class="scroller" role="region" tabindex="0" aria-labelledby="documented">
-      <table class="listed">
-        <caption class="sr-only">
-          Cameras Sony's Camera Remote Command tables cover, with the connection
-          routes and Picture Profile level Sony documents for each. Not verified
-          by Lutaro.
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">Camera</th>
-            <th scope="col">USB</th>
-            <th scope="col">Wi-Fi</th>
-            <th scope="col">Bluetooth</th>
-            <th scope="col">Picture&nbsp;Profile</th>
-            <th scope="col">Creative&nbsp;Look</th>
-          </tr>
-        </thead>
-        <tbody>
-          {documented.map((camera) => (
-            <tr>
-              <th scope="row">
-                <span class="name">{camera.marketingName}</span>
-                {camera.marketingName !== camera.bodyCode && (
-                  <span class="code">{camera.bodyCode}</span>
-                )}
-                {camera.aliases.length > 0 && (
-                  <span class="code">/ {camera.aliases.join(', ')}</span>
-                )}
-              </th>
-              {['USB cable', 'Wi-Fi'].map((carrier) => (
-                <td class={`mark ${camera.carrierMarks[carrier]}`}>
-                  <span aria-hidden="true">{CARRIER_GLYPH[camera.carrierMarks[carrier]]}</span>
-                  <span class="sr-only">{CARRIER_WORD[camera.carrierMarks[carrier]]}</span>
-                </td>
-              ))}
-              <td class={`mark ${camera.bluetooth}`}>
-                <span aria-hidden="true">{CARRIER_GLYPH[camera.bluetooth]}</span>
-                <span class="sr-only">{CARRIER_WORD[camera.bluetooth]}</span>
+  <div class="scroller" role="region" tabindex="0" aria-label="Sony camera compatibility">
+    <table class="listed">
+      <thead>
+        <tr>
+          <th scope="col">Camera</th>
+          <th scope="col">USB</th>
+          <th scope="col">Wi&#8209;Fi</th>
+          <th scope="col">Picture&nbsp;Profiles</th>
+          <th scope="col">Tested</th>
+        </tr>
+      </thead>
+      <tbody>
+        {view.cameras.map((camera) => (
+          <tr class="tested">
+            <th scope="row">
+              <span class="name">{camera.marketingName}</span>
+              <span class="code">{camera.bodyCode}</span>
+            </th>
+            {['USB', 'Wi-Fi'].map((route) => (
+              <td class={`mark ${routes(camera).includes(route) ? 'yes' : 'no'}`}>
+                <span aria-hidden="true">{routes(camera).includes(route) ? GLYPH.yes : GLYPH.no}</span>
+                <span class="sr-only">{routes(camera).includes(route) ? 'Yes' : 'No'}</span>
               </td>
-              <td class="pp">{camera.pictureProfile || 'Not stated'}</td>
-              <td class="pp">{camera.creativeLook || 'Not stated'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-
-  <div class="note">
-    <strong>Picture Profile column.</strong> <em>Full</em> means Lutaro can read
-    every setting inside a PP slot and write a whole profile into it - the point
-    of the app. <em>Selector only</em> means the body exposes just the slot
-    switch: Lutaro can change which PP the camera is on, but cannot read or
-    write what is inside one, so a profile from your library cannot be applied
-    to that body. <em>Unavailable</em> means no Picture Profile control at all.
+            ))}
+            <td class="pp">{camera.pictureProfile.label}</td>
+            <td class="mark yes">
+              <span aria-hidden="true">{GLYPH.yes}</span>
+              <span class="sr-only">Tested with Lutaro</span>
+            </td>
+          </tr>
+        ))}
+        {listed.map((camera) => (
+          <tr>
+            <th scope="row">
+              <span class="name">{camera.marketingName}</span>
+              {camera.marketingName !== camera.bodyCode && (
+                <span class="code">{camera.bodyCode}</span>
+              )}
+            </th>
+            {['USB cable', 'Wi-Fi'].map((carrier) => (
+              <td class={`mark ${camera.carrierMarks[carrier]}`}>
+                <span aria-hidden="true">{GLYPH[camera.carrierMarks[carrier]]}</span>
+                <span class="sr-only">{WORD[camera.carrierMarks[carrier]]}</span>
+              </td>
+            ))}
+            <td class="pp">{camera.pictureProfile || 'Not known'}</td>
+            <td class="mark unstated">
+              <span aria-hidden="true">{GLYPH.unstated}</span>
+              <span class="sr-only">Not tested</span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 
-  <p class="meta">
-    Every value above is what Sony's tables state, not a Lutaro test result.
-    Sony documents which interfaces carry the command set per body; which
-    <em>kind</em> of IP connection that is (home Wi-Fi, the camera's own
-    hotspot, wired LAN) is in each model's own Sony help guide.
-  </p>
-
-  <h2>What the verdicts mean</h2>
+  <h2>What the columns mean</h2>
   <dl class="glossary">
-    <dt>Full Picture Profile support</dt>
+    <dt>USB and Wi-Fi</dt>
+    <dd>How you can connect. Both work on iPhone, iPad, and Mac.</dd>
+    <dt>Picture Profiles: full</dt>
+    <dd>Lutaro reads and writes every setting in a PP slot. The normal case.</dd>
+    <dt>Picture Profiles: selector only</dt>
     <dd>
-      Lutaro reads every setting out of a PP slot and writes a whole profile
-      back into one - gamma, colour mode, detail, knee, black level, and the
-      rest.
+      Lutaro can switch which PP slot the camera uses, but cannot read or change
+      what is inside one - so profiles from your library cannot be applied.
     </dd>
-    <dt>Selector only</dt>
-    <dd>
-      Lutaro can choose which Picture Profile slot the camera is using, but it
-      cannot read or change the settings inside that slot. The body exposes the
-      slot switch and nothing behind it, so a profile from your library cannot
-      be written to it.
-    </dd>
-    <dt>Picture Profiles unavailable</dt>
-    <dd>The body offers no Picture Profile control over a remote connection at all.</dd>
-    <dt>Creative Look and Creative Style</dt>
-    <dd>
-      Two different Sony features, tracked separately here.
-      <strong>Creative Look</strong> is the newer system (ST, PT, FL and the
-      custom looks on recent bodies); <strong>Creative Style</strong> is the
-      older preset system it replaced. A body can have one, the other, or
-      neither, so neither verdict implies the other.
-    </dd>
-    <dt>Bluetooth setup</dt>
-    <dd>
-      Whether Lutaro can use Bluetooth on this body to start its Wi-Fi hotspot
-      and wake it from sleep. It is a way of <em>reaching</em> the camera when
-      there is no network to share, not a way of talking to it - every command
-      still travels over Wi-Fi or the cable afterwards.
-    </dd>
-    <dt>Not reviewed</dt>
-    <dd>
-      Nobody has produced citable evidence either way. It is a third state - it
-      does not mean the feature is missing, and it does not mean it works.
-    </dd>
+    <dt>Not known</dt>
+    <dd>Nobody has checked yet. It does not mean no.</dd>
   </dl>
 
-  <h2>Where these facts come from</h2>
+  <h2>Bluetooth</h2>
   <p>
-    Every row is generated from one reviewed catalog inside the Lutaro app, not
-    typed into this page. An entry is written only from Sony's own published
-    command tables or from a compatibility report a user ran on real hardware
-    and a maintainer reviewed - never from a forum post or a guess. Conflicting
-    evidence stays visible as an unresolved note rather than quietly overwriting
-    the standing claim.
+    Bluetooth is not a connection on its own. Lutaro uses it to start the
+    camera's Wi-Fi hotspot and to wake the camera, then does the real work over
+    Wi-Fi. Useful when there is no network to share.
+    <a href={`${base}/setup/#bluetooth`}>How to set it up</a>.
   </p>
-  <p>
-    Sony's authoritative list of bodies that speak the remote command set is the
-    <a href="https://support.d-imaging.sony.co.jp/app/sdk/en/index.html">
-      Camera Remote SDK / Camera Remote Command page</a>. A body listed there is
-    not automatically listed here: Sony's tables describe the camera, this page
-    describes what Lutaro has actually been shown to do with it.
-  </p>
-  {withheld > 0 && (
-    <p>
-      {withheld === 1
-        ? 'One body has been reviewed and does not work with Lutaro, so it appears in neither list.'
-        : `${withheld} bodies have been reviewed and do not work with Lutaro, so they appear in neither list.`}
-      That is a settled answer, not a pending one.
-    </p>
-  )}
 
-  <h2>Your camera isn't listed?</h2>
+  <h2>Camera not listed?</h2>
   <p>
-    That is not a "no" - most Sony bodies have simply never been reviewed. If you
-    have one, Lutaro can produce a compatibility report for it: connect the
-    camera by USB and use <em>Settings → Diagnostics → Camera compatibility</em>.
-    The report is redacted, it never leaves your device unless you share it, and
-    it is what turns a body into an entry above. Then
-    <a href={`${base}/support/`}>send it over</a> - by email or as an issue.
+    Sony's list covers 2020 and later bodies only. If yours is missing, connect
+    it by USB and run <em>Settings → Diagnostics → Camera compatibility</em> in
+    the app, then <a href={`${base}/support/`}>send us the result</a>. That is how a
+    camera gets tested.
   </p>
   <p>
-    Before any of that, walk the
-    <a href={`${base}/setup/`}>camera setup guide</a> - most "it doesn't connect"
-    reports are a camera setting, not a compatibility limit.
+    If it is listed but will not connect, check the
+    <a href={`${base}/setup/`}>setup guide</a> first - most of the time it is a
+    camera setting.
+  </p>
+  <p class="meta">
+    Camera list from Sony's Camera Remote Command documentation
+    ({sony.package}). Sony says which bodies speak the protocol; only the
+    Tested rows have been run with Lutaro. Lutaro is not affiliated with Sony.
   </p>
 
   <style>
-    .empty { color: var(--text-secondary); }
-    .cameras { list-style: none; padding: 0; margin: 1.5rem 0 0; }
-    .camera {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.1rem 1.2rem;
-      margin-bottom: 1rem;
-    }
-    .camera h2 {
-      margin: 0;
-      font-size: 1.3rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.6rem;
-    }
-    .code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.72em;
-      font-weight: 400;
-      color: var(--text-secondary);
-    }
-    .aliases { margin: 0.3rem 0 0; font-size: 0.85em; color: var(--text-secondary); }
-    .camera dl { margin: 1rem 0 0; }
-    .row {
-      display: grid;
-      grid-template-columns: 11rem 1fr;
-      gap: 0.4rem 1rem;
-      padding: 0.6rem 0;
-      border-top: 1px solid var(--border);
-    }
-    .row dt { font-weight: 600; font-size: 0.92em; }
-    .row dd { margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
-    .detail { font-size: 0.88em; color: var(--text-secondary); }
-    .source { font-size: 0.82em; color: var(--text-tertiary); }
-    .divergence { color: var(--text); }
-
-    /* Each verdict carries its own word plus a leading mark, so the meaning
-       never rests on colour alone. */
-    .badge {
-      align-self: start;
-      font-size: 0.82em;
-      font-weight: 600;
-      padding: 0.15rem 0.55rem;
-      border-radius: 980px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .badge::before { margin-right: 0.35rem; }
-    .badge.yes { color: #1a7f37; border-color: #1a7f3755; }
-    .badge.yes::before { content: "\2713"; }
-    .badge.partial { color: #9a6700; border-color: #9a670055; }
-    .badge.partial::before { content: "\25D0"; }
-    .badge.no { color: #b3261e; border-color: #b3261e55; }
-    .badge.no::before { content: "\2715"; }
-    .badge.unreviewed { color: var(--text-secondary); }
-    .badge.unreviewed::before { content: "\2013"; }
-    @media (prefers-color-scheme: dark) {
-      .badge.yes { color: #56d364; border-color: #56d36455; }
-      .badge.partial { color: #e3b341; border-color: #e3b34155; }
-      .badge.no { color: #ff7b72; border-color: #ff7b7255; }
-    }
-
     .sr-only {
       position: absolute;
       width: 1px; height: 1px;
@@ -384,33 +141,39 @@ const CARRIER_WORD = {
       white-space: nowrap;
     }
     /* The table scrolls inside its own box so the PAGE never scrolls sideways;
-       the region is focusable so it is reachable by keyboard. */
+       the region is focusable so it stays reachable by keyboard. */
     .scroller {
       overflow-x: auto;
-      margin: 1.2rem 0 0;
+      margin: 1.6rem 0 0;
       border: 1px solid var(--border);
       border-radius: 12px;
     }
     .scroller:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-    .listed { margin: 0; border-collapse: collapse; width: 100%; font-size: 0.88em; }
-    .listed th, .listed td { border: 0; border-bottom: 1px solid var(--border); }
+    .listed { margin: 0; border-collapse: collapse; width: 100%; font-size: 0.9em; }
+    .listed th, .listed td {
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0.7rem;
+      /* Contains the absolutely-positioned .sr-only spans. Without this their
+         containing block is the page, so a cell scrolled out of the table's
+         overflow box drags the PAGE's scroll width out with it. */
+      position: relative;
+    }
     .listed tbody tr:last-child th,
     .listed tbody tr:last-child td { border-bottom: 0; }
     .listed thead th {
       background: var(--surface);
-      font-size: 0.86em;
+      font-size: 0.84em;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--text-secondary);
       white-space: nowrap;
     }
-    .listed th, .listed td { padding: 0.5rem 0.7rem; }
-    /* Model codes must not break mid-token; the scroller absorbs the width. */
     .listed tbody th { font-weight: 600; text-align: left; white-space: nowrap; }
     .listed .name { display: block; }
     .listed .code {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.82em;
+      font-size: 0.8em;
       font-weight: 400;
       color: var(--text-secondary);
     }
@@ -419,17 +182,12 @@ const CARRIER_WORD = {
     .listed .mark.no { color: #b3261e; }
     .listed .mark.unstated { color: var(--text-tertiary); }
     .listed .pp { color: var(--text-secondary); white-space: nowrap; }
+    .listed tr.tested { background: var(--surface); }
     @media (prefers-color-scheme: dark) {
       .listed .mark.yes { color: #56d364; }
       .listed .mark.no { color: #ff7b72; }
     }
-
-    .glossary dt { font-weight: 600; margin-top: 1rem; }
-    .glossary dd { margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.95em; }
-
-    @media (max-width: 34rem) {
-      .row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.7rem 0; }
-      .camera { padding: 1rem; }
-    }
+    .glossary dt { font-weight: 600; margin-top: 0.9rem; }
+    .glossary dd { margin: 0.2rem 0 0; color: var(--text-secondary); }
   </style>
 </Base>
