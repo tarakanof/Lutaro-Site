@@ -90,6 +90,15 @@ const routes = (camera) => camera.platforms[0].label.split(' or ');
     </table>
   </div>
 
+  {view.cameras.some((camera) => camera.extras.length > 0) && (
+    <p class="extras">
+      {view.cameras
+        .filter((camera) => camera.extras.length > 0)
+        .map((camera) => `${camera.marketingName} - ${camera.extras.join(', ')}.`)
+        .join(' ')}
+    </p>
+  )}
+
   <h2>What the columns mean</h2>
   <dl class="glossary">
     <dt>USB and Wi-Fi</dt>
@@ -187,6 +196,7 @@ const routes = (camera) => camera.platforms[0].label.split(' or ');
       .listed .mark.yes { color: #56d364; }
       .listed .mark.no { color: #ff7b72; }
     }
+    .extras { font-size: 0.92em; color: var(--text-secondary); margin-top: 0.9rem; }
     .glossary dt { font-weight: 600; margin-top: 0.9rem; }
     .glossary dd { margin: 0.2rem 0 0; color: var(--text-secondary); }
   </style>

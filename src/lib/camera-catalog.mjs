@@ -298,6 +298,16 @@ function entryView(entry) {
     creativeLook: lookSupport(entry, 'creativeLook'),
     creativeStyle: lookSupport(entry, 'creativeStyle'),
     bluetooth: featureSupport(entry, 'bluetooth', 'Bluetooth setup'),
+    // What else is known about a tested body, as short phrases. Only a handful
+    // of cameras will ever carry these, so the page states them in a sentence
+    // rather than adding columns that would be blank on every other row.
+    extras: [
+      entry.claims.creativeLook && `Creative Look: ${FEATURE_LABELS[entry.claims.creativeLook.value].toLowerCase()}`,
+      entry.claims.creativeStyle && `Creative Style: ${FEATURE_LABELS[entry.claims.creativeStyle.value].toLowerCase()}`,
+      entry.claims.bluetooth?.value === 'supported' && 'Bluetooth setup works',
+      entry.claims.remoteShutter?.value === 'supported' && 'remote shutter',
+      entry.claims.liveView?.value === 'supported' && 'live view',
+    ].filter(Boolean),
     remoteShutter: featureSupport(entry, 'remoteShutter', 'remote shutter release'),
     liveView: featureSupport(entry, 'liveView', 'live view'),
     evidence: {

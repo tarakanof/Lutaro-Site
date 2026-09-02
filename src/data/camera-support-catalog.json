@@ -185,6 +185,14 @@
       "aliases": [],
       "bodyCode": "ILCE-6700",
       "claims": {
+        "bluetooth": {
+          "provenance": "reviewedHardwareReport",
+          "value": "supported"
+        },
+        "creativeLook": {
+          "provenance": "reviewedHardwareReport",
+          "value": "full"
+        },
         "pictureProfile": {
           "provenance": "both",
           "value": "full"

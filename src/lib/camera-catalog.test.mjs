@@ -258,6 +258,21 @@ test('the fields arriving from Lutaro#1503 are accepted with their agreed vocabu
   assert.equal(publicationDecision(bt).published, false, 'BLE alone is not a route');
 });
 
+test('a tested camera states its extra capabilities as short phrases', () => {
+  // Only a handful of bodies will ever carry these, so they are a sentence on
+  // the page rather than columns that would be blank on every other row.
+  const entry = reviewedEntry();
+  entry.claims.creativeLook = { value: 'full', provenance: 'reviewedHardwareReport' };
+  entry.claims.bluetooth = { value: 'supported', provenance: 'reviewedHardwareReport' };
+  entry.claims.liveView = { value: 'unsupported', provenance: 'sonyDocumentation' };
+  const [camera] = catalogView(wrap(entry)).cameras;
+  assert.deepEqual(camera.extras, ['Creative Look: full', 'Bluetooth setup works']);
+
+  // Nothing claimed means nothing said - never an empty or hedged phrase.
+  const [bare] = catalogView(wrap(reviewedEntry())).cameras;
+  assert.deepEqual(bare.extras, []);
+});
+
 test('cameras are sorted by marketing name', () => {
   const zeta = { ...reviewedEntry(), bodyCode: 'ILCE-1', marketingName: 'Zeta' };
   const alpha = { ...reviewedEntry(), bodyCode: 'ILCE-2', marketingName: 'Alpha' };
