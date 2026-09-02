@@ -86,9 +86,9 @@ Here are my settings:
 
 const exampleFiles = [
   { file: 'S-Cinetone-Look.profile', label: 'S-Cinetone-Look.profile', note: "Sony's cinematic gamma + color mode, all adjustments at their defaults." },
-  { file: 'Rec709-Broadcast-Safe.profile', label: 'Rec709-Broadcast-Safe.profile', note: 'A Rec.709-ish baseline (ITU709 gamma, Rec.709 color mode).' },
+  { file: 'Rec709-Broadcast-Safe.profile', label: 'Rec709-Broadcast-Safe.profile', note: 'A standard Rec.709 starting point (ITU709 gamma, Rec.709 color mode).' },
   { file: 'HLG3-HDR.profile', label: 'HLG3-HDR.profile', note: 'HLG3 gamma with the BT.2020 color mode, for direct-to-display HDR.' },
-  { file: 'FL-Faded-Look.profile', label: 'FL-Faded-Look.profile', note: 'A Creative Look recipe: the FL base style with a gentle fade and softened contrast.' },
+  { file: 'FL-Faded-Look.profile', label: 'FL-Faded-Look.profile', note: 'A Creative Look: the FL base style with a gentle fade and softer contrast.' },
 ];
 ---
 <Base
@@ -99,12 +99,11 @@ const exampleFiles = [
   <p class="meta">The <code>.profile</code> format, every key, and an AI prompt to write one for you</p>
 
   <p>
-    A Lutaro profile is a plain text file. If you have camera settings from a
-    YouTube video, a Reddit post, or a page of notes, you can turn them into a
-    file Lutaro imports in a couple of minutes - by hand, or by letting an
+    A Lutaro profile is a plain text file. Have camera settings from a YouTube
+    video, a Reddit post, or your own notes? You can turn them into a file
+    Lutaro imports. Write it by hand, or let an
     <a href="#llm">AI write it for you</a>. The same format works for both
-    kinds of profile: <strong>Picture Profiles</strong> and
-    <strong>Creative Looks</strong>.
+    <strong>Picture Profiles</strong> and <strong>Creative Looks</strong>.
   </p>
 
   <h2 id="quick-start">1. Quick start</h2>
@@ -137,10 +136,10 @@ cl_fade=3</code></pre>
     <li><strong>Mac</strong> - drag the file into the Lutaro window.</li>
   </ul>
   <p>
-    You don't need every key - only <code>name=</code> really matters. Add as
-    much or as little as your source gives you. One extra rule: a Creative
-    Look file must include <code>profile_kind=creative_look</code>. Without
-    it, Lutaro reads the file as a Picture Profile.
+    You do not need every key. Only <code>name=</code> matters. Add as much or
+    as little as your source gives you. One extra rule: a Creative Look file
+    must include <code>profile_kind=creative_look</code>. Without it, Lutaro
+    reads the file as a Picture Profile.
   </p>
 
   <h2 id="rules">2. Format rules</h2>
@@ -157,21 +156,20 @@ cl_fade=3</code></pre>
       <code>BLACK_LEVEL</code> all mean the same key.
     </li>
     <li>
-      Unknown keys don't break anything - a line like
-      <code>my_note=whatever</code> is kept as it is. The only thing that
-      makes a file fail to import is a line with no <code>=</code> at all, or
-      an empty key before the <code>=</code>.
+      Unknown keys are safe. A line like <code>my_note=whatever</code> is kept
+      as it is. Only two things make a file fail: a line with no
+      <code>=</code>, or an empty key before the <code>=</code>.
     </li>
     <li>
       Only <code>name=</code> is needed. If you leave it out, Lutaro uses the
       filename (without <code>.profile</code>) as the name.
     </li>
     <li>
-      A number outside a key's range is pulled back to the nearest allowed
-      value on import, not rejected - <code>black_level=50</code> becomes
-      <code>15</code>. Text values (like a gamma name) are kept exactly as
-      written; if the app doesn't recognize a spelling, it marks it in the
-      editor and won't write it to the camera. So copy the spellings from the
+      A number outside a key's range is changed to the nearest allowed value.
+      The file is not rejected: <code>black_level=50</code> becomes
+      <code>15</code>. Text values, such as a gamma name, are kept exactly as
+      written. If the app does not know a spelling, it marks it in the editor
+      and will not write it to the camera. So copy the spellings from the
       tables below exactly.
     </li>
   </ul>
@@ -206,10 +204,10 @@ cl_fade=3</code></pre>
 
   <h2 id="cl-keys">4. Key reference - Creative Looks</h2>
   <p>
-    A Creative Look recipe starts from one of the camera's built-in base styles
-    and adjusts it. The file must include
-    <code>profile_kind=creative_look</code>; use only these keys (never mix
-    them with Picture Profile keys in one file).
+    A Creative Look starts from one of the camera's built-in base styles and
+    adjusts it. The file must include
+    <code>profile_kind=creative_look</code>. Use only these keys, and never
+    mix them with Picture Profile keys in one file.
   </p>
   {keys.creativeLookGroups.map((group: any) => (
     <div class="overflow">
@@ -242,26 +240,24 @@ cl_fade=3</code></pre>
     </table>
   </div>
   <div class="note">
-    Lutaro also writes a few internal keys of its own (<code>id</code>,
-    <code>slot</code>, <code>tags_escaped</code>, <code>white_balance</code>,
-    …) when it saves a profile. You never need to write these yourself - and
-    any extra lines you add are kept, not rejected (see the format rules
-    above).
+    When Lutaro saves a profile it adds a few keys of its own
+    (<code>id</code>, <code>slot</code>, <code>tags_escaped</code>,
+    <code>white_balance</code>). You never need to write these yourself, and
+    any extra lines you add are kept.
   </div>
 
-  <h2 id="llm">5. Have settings from Reddit, YouTube, or a PDF? Let an AI write the file.</h2>
+  <h2 id="llm">5. Let an AI write the file for you</h2>
   <p>
-    Copy the prompt below into any chat AI (ChatGPT, Claude, Gemini, …), then
-    paste your source settings - or attach a screenshot or PDF - after it. A
-    photo of the camera menu works too, as long as the AI you use can read
-    images.
+    Copy the prompt below into any chat AI (ChatGPT, Claude, Gemini). Then
+    paste your settings after it, or attach a screenshot or PDF. A photo of
+    the camera menu also works, if your AI can read images.
   </p>
   <div class="note">
-    <strong>Why the strict rules matter.</strong> AIs like to invent values
-    (for example <code>black_level=-7</code>) when the source doesn't state
-    one. The prompt tells the AI to output <em>only</em> what the source
-    actually says and to put everything else into <code>notes=</code>. Check
-    the result before importing - these values will go to your camera.
+    <strong>Why the strict rules matter.</strong> AI tools often invent a
+    value, such as <code>black_level=-7</code>, when the source does not give
+    one. The prompt tells the AI to write <em>only</em> what the source
+    actually says, and to put everything else into <code>notes=</code>. Check
+    the result before you import it. These values go to your camera.
   </div>
   <div class="codeblock">
     <button class="copy" data-copy="prompt">Copy prompt</button>
@@ -276,21 +272,21 @@ cl_fade=3</code></pre>
   <p>A single <code>.profile</code> file is the simplest case. Lutaro also accepts:</p>
   <ul>
     <li>
-      <strong><code>.lutaroprofiles</code> package</strong> - what Lutaro itself
-      exports. This is the best way to share looks: it carries names, tags,
-      notes, and preview images together. Just open or drag one in.
+      <strong><code>.lutaroprofiles</code> package</strong> - what Lutaro
+      exports. This is the best way to share looks, because it keeps names,
+      tags, notes, and preview images together. Open it or drag it in.
     </li>
     <li><strong>A <code>.zip</code></strong> of a <code>.lutaroprofiles</code> package.</li>
     <li><strong>A folder</strong> of <code>.profile</code> files - every profile inside is imported.</li>
   </ul>
   <p>
-    Have a recipe in some other form - a Markdown table, a blog post, a
-    screenshot? Use the <a href="#llm">AI prompt above</a> to turn it into
+    Have settings in another form, such as a blog post or a screenshot? Use
+    the <a href="#llm">AI prompt above</a> to turn them into
     <code>.profile</code> files.
   </p>
 
-  <h2 id="examples">7. Downloadable examples</h2>
-  <p>Real, ready-to-import profiles. Download one and open it in Lutaro to see the format in action.</p>
+  <h2 id="examples">7. Example files</h2>
+  <p>Real profiles you can import. Download one and open it in Lutaro to see how the format works.</p>
   <ul class="examples">
     {exampleFiles.map((ex) => (
       <li>
