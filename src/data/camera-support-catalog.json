@@ -1,6 +1,56 @@
 {
   "entries": [
     {
+      "aliases": [],
+      "bodyCode": "BRC-AM7",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "BRC-AM7",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "DSC-RX0M2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "RX0 II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
       "aliases": [
         "DSC-RX100M7A"
       ],
@@ -29,6 +79,110 @@
     },
     {
       "aliases": [],
+      "bodyCode": "DSC-RX1RM3",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "RX1R III",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "HXR-NX800",
+      "claims": {
+        "liveView": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "HXR-NX800",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-1",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b11",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-1M2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b11 II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
       "bodyCode": "ILCE-6700",
       "claims": {
         "pictureProfile": {
@@ -50,6 +204,695 @@
       "marketingName": "\u03b16700",
       "reviewDate": "2026-09-01",
       "sourceIssue": 1484,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7C",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17C",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7CM2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17C II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7CR",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17CR",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7M4",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17 IV",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7M5",
+      "claims": {
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17 V",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7RM4",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17R IV",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7RM4A",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17R IVA",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7RM5",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17R V",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7RM6",
+      "claims": {
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17R VI",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-7SM3",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b17S III",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-9M2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b19 II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILCE-9M3",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "\u03b19 III",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILME-FR7",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "FR7",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILME-FX2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "FX2",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [
+        "ILME-FX3A"
+      ],
+      "bodyCode": "ILME-FX3",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "FX3",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILME-FX30",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "FX30",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILME-FX6",
+      "claims": {
+        "liveView": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "FX6",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ILX-LR1",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ILX-LR1",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "MPC-2610",
+      "claims": {
+        "liveView": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "BURANO",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "PXW-Z200",
+      "claims": {
+        "liveView": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "PXW-Z200",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [
+        "PXW-Z380"
+      ],
+      "bodyCode": "PXW-Z300",
+      "claims": {
+        "liveView": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "PXW-Z300",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [
+        "ZV-1A"
+      ],
+      "bodyCode": "ZV-1",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-1",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ZV-1F",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "none"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-1F",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ZV-1M2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "unsupported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-1 II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ZV-E1",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-E1",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ZV-E10",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "selectorOnly"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-E10",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
+      "unresolvedDivergences": []
+    },
+    {
+      "aliases": [],
+      "bodyCode": "ZV-E10M2",
+      "claims": {
+        "pictureProfile": {
+          "provenance": "sonyDocumentation",
+          "value": "full"
+        },
+        "ptpIP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        },
+        "usbPTP": {
+          "provenance": "sonyDocumentation",
+          "value": "supported"
+        }
+      },
+      "firmwareScope": {
+        "kind": "unstated"
+      },
+      "marketingName": "ZV-E10 II",
+      "reviewDate": "2026-09-02",
+      "sourceIssue": 1503,
       "unresolvedDivergences": []
     }
   ],
