@@ -16,13 +16,13 @@
     },
     {
       "name": "Dev server",
-      "command": "npm run dev -- --port 4321",
+      "command": "if lsof -nP -iTCP:4321 -sTCP:LISTEN >/dev/null; then echo 'Port 4321 is busy: stop the dev server in the other worktree first' >&2; false; else npm run dev -- --port 4321; fi",
       "icon": "play",
       "previewUrl": "http://localhost:4321/Lutaro-Site/"
     },
     {
       "name": "Codex review",
-      "command": "codex review --base origin/main",
+      "command": "git fetch --quiet origin main && codex review --base origin/main",
       "icon": "lint"
     }
   ]
