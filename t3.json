@@ -1,0 +1,29 @@
+{
+  "$schema": "https://t3.codes/schema/t3.json",
+  "defaultThreadEnvMode": "worktree",
+  "scripts": [
+    {
+      "name": "Install dependencies",
+      "command": "npm ci",
+      "icon": "configure",
+      "runOnWorktreeCreate": true,
+      "async": false
+    },
+    {
+      "name": "Check",
+      "command": "npm run check",
+      "icon": "test"
+    },
+    {
+      "name": "Dev server",
+      "command": "if lsof -nP -iTCP:4321 -sTCP:LISTEN >/dev/null; then echo 'Port 4321 is busy: stop the dev server in the other worktree first' >&2; false; else npm run dev -- --port 4321; fi",
+      "icon": "play",
+      "previewUrl": "http://localhost:4321/Lutaro-Site/"
+    },
+    {
+      "name": "Codex review",
+      "command": "git fetch --quiet origin main && codex review --base origin/main",
+      "icon": "lint"
+    }
+  ]
+}
