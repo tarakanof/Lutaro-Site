@@ -1,0 +1,29 @@
+{
+  "$schema": "https://t3.codes/schema/t3.json",
+  "defaultThreadEnvMode": "worktree",
+  "scripts": [
+    {
+      "name": "Install dependencies",
+      "command": "npm ci",
+      "icon": "configure",
+      "runOnWorktreeCreate": true,
+      "async": false
+    },
+    {
+      "name": "Check",
+      "command": "npm run check",
+      "icon": "test"
+    },
+    {
+      "name": "Dev server",
+      "command": "npm run dev -- --port 4321",
+      "icon": "play",
+      "previewUrl": "http://localhost:4321/Lutaro-Site/"
+    },
+    {
+      "name": "Codex review",
+      "command": "codex review --base origin/main",
+      "icon": "lint"
+    }
+  ]
+}
